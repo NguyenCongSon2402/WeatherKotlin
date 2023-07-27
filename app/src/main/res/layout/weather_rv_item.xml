@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_100sdp"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_5sdp"
+    android:background="@drawable/transparent_background">
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:text="TIME"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp" />
+
+    <TextView
+        android:id="@+id/tv_temperature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_time"
+        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:text="20°C"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp" />
+
+    <ImageView
+        android:id="@+id/Img_Condition"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_below="@id/tv_temperature"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/_5sdp"
+        android:padding="@dimen/_5sdp"
+        android:src="@drawable/img_rain" />
+
+    <TextView
+        android:id="@+id/tv_WindSpeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Img_Condition"
+        android:layout_margin="@dimen/_5sdp"
+        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:text="13 Km/h"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp" />
+
+
+</RelativeLayout>

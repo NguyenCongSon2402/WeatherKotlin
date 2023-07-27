@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_70sdp"
+    android:layout_margin="@dimen/_5sdp"
+    android:layout_weight="1"
+    android:background="@drawable/transparent_background">
+
+    <TextView
+        android:id="@+id/txt_direction"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:text="Tây"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_11sdp" />
+
+    <TextView
+        android:id="@+id/speeds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:text="12km/h"
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/compass"
+        android:layout_width="@dimen/_45sdp"
+        android:layout_height="@dimen/_45sdp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:padding="@dimen/_7sdp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/compass" />
+</RelativeLayout>

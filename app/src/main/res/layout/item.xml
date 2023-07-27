@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_80sdp"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_5sdp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txt_thu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Hôm nay"
+        android:textSize="@dimen/_18sdp" />
+
+    <TextView
+        android:id="@+id/txt_ngay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_25sdp"
+        android:text="19/7"
+        android:textSize="@dimen/_18sdp" />
+
+    <ImageView
+        android:id="@+id/img_weather"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/rain_black" />
+
+    <TextView
+        android:id="@+id/txt_TempC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:text="31/27"
+        android:textSize="@dimen/_18sdp" />
+
+    <TextView
+        android:id="@+id/txt_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="14km/h"
+        android:textSize="@dimen/_18sdp" />
+
+
+</LinearLayout>
