@@ -3,16 +3,20 @@ package com.example.weatherkotlin.ui.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.weatherkotlin.data.model1.WeatherCityData.WeatherCityData
 import com.example.weatherkotlin.ui.fragment.Fragment1
+import java.util.ArrayList
 
 class ViewPagerAdapter(
     private val fragmentActivity: FragmentActivity,
-    private val dataList: List<String>
+    private val dataList: ArrayList<WeatherCityData>
 ) : FragmentStateAdapter(fragmentActivity) {
+
 
     override fun createFragment(position: Int): Fragment {
         return if (position >= 0 && position < dataList.size) {
-            Fragment1.newInstance(dataList[position])
+            val fragment = Fragment1.newInstance(dataList[position])
+            fragment
         } else {
             Fragment()
         }

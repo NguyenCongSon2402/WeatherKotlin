@@ -23,6 +23,37 @@
         android:textColor="@color/white"
         android:textSize="@dimen/_22sdp" />
 
+    <TextView
+        android:id="@+id/title_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_fragment"
+        android:layout_centerHorizontal="true"
+        android:text="Đang cập nhập"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_10sdp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/title_updateSucces"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_fragment"
+        android:layout_centerHorizontal="true"
+        android:text="Cập nhập thành công"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_10sdp"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/img_wifiOff"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/baseline_wifi_off_24"
+        android:visibility="gone" />
+
+
     <ImageView
         android:id="@+id/image_overflowMenu"
         android:layout_width="@dimen/_22sdp"

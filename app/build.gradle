@@ -72,6 +72,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     // coroutine
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
     // swipe refresh layout
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
