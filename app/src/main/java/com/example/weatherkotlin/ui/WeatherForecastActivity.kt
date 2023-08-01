@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherkotlin.R
 import com.example.weatherkotlin.ui.adapter.WeatherForecast5DaysAdapter
 
-class WeatherForecastActivity : AppCompatActivity() {
+class  WeatherForecastActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var btn_back: ImageButton
 

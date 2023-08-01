@@ -5,6 +5,11 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.WeatherForecastActivity">
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/sky" />
 
     <ImageButton
         android:id="@+id/btn_Back"
@@ -20,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btn_Back"
+        android:textColor="@color/white"
         android:layout_marginStart="@dimen/_20sdp"
         android:text="Dự báo 5 ngày"
         android:textSize="@dimen/_35sdp" />

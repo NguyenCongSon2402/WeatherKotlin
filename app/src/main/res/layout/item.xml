@@ -10,12 +10,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:textColor="@color/white"
         android:text="Hôm nay"
         android:textSize="@dimen/_18sdp" />
 
     <TextView
         android:id="@+id/txt_ngay"
         android:layout_width="wrap_content"
+        android:textColor="@color/white"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/_25sdp"
@@ -35,6 +37,7 @@
         android:id="@+id/txt_TempC"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/_15sdp"
         android:text="31/27"
@@ -43,6 +46,7 @@
     <TextView
         android:id="@+id/txt_speed"
         android:layout_width="wrap_content"
+        android:textColor="@color/white"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="14km/h"

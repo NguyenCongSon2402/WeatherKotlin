@@ -1,6 +1,5 @@
 package com.example.weatherkotlin.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,6 +10,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherkotlin.R
@@ -31,6 +31,17 @@ class CityManagementActivity : AppCompatActivity(), RecyclerViewItemClickListene
     private lateinit var adapter: CityManagementAdapter
     private lateinit var autoCompleteAdapter: ArrayAdapter<String>
     private val citySuggestions = mutableListOf<String>()
+    private val COUNTRIES = arrayOf(
+        "Belgium", "France", "Italy", "Germany", "Spain","Hanoi",
+        "Ho Chi Minh City",
+        "Tokyo",
+        "New York",
+        "London",
+        "Paris",
+        "Sydney",
+        "Berlin",
+        "Moscow"
+    )
 
     private lateinit var recyclerView: RecyclerView
     private val selectedItems = mutableSetOf<Int>()
@@ -100,35 +111,35 @@ class CityManagementActivity : AppCompatActivity(), RecyclerViewItemClickListene
         }
         // Khởi tạo Adapter và gán cho AutoCompleteTextView
         //val suggestions = mutableListOf<String>() // Danh sách gợi ý tìm kiếm
-        autoCompleteAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, citySuggestions)
+        autoCompleteAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, COUNTRIES)
         editTextSearch.setAdapter(autoCompleteAdapter)
 
-        editTextSearch.addTextChangedListener(object :TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val searchQuery=p0.toString().trim()
-                if (searchQuery.isNotEmpty()){
-                    performAutocompleteSearch(searchQuery)
-                    autoCompleteAdapter.notifyDataSetChanged()
-                    Log.e("citySuggestions","Đã thay đổi dữ liệu")
-                }else if (searchQuery.isEmpty()){
-                    // Nếu trường AutoCompleteTextView rỗng, xoá danh sách gợi ý tìm kiếm
-                    citySuggestions.clear()
-                    Log.e("citySuggestions","Đã xoá danh sách")
-                    Log.e("citySuggestions",citySuggestions.toString())
-                    //autoCompleteAdapter.notifyDataSetChanged()
-                }
-
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                // Cập nhật lại Adapter sau khi thay đổi văn bản
-                autoCompleteAdapter.notifyDataSetChanged()
-            }
-
-        })
+//        editTextSearch.addTextChangedListener(object :TextWatcher{
+//            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//            }
+//
+//            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//                val searchQuery=p0.toString().trim()
+//                if (searchQuery.isNotEmpty()){
+//                    performAutocompleteSearch(searchQuery)
+//                    autoCompleteAdapter.notifyDataSetChanged()
+//                    Log.e("citySuggestions","Đã thay đổi dữ liệu")
+//                }else if (searchQuery.isEmpty()){
+//                    // Nếu trường AutoCompleteTextView rỗng, xoá danh sách gợi ý tìm kiếm
+//                    citySuggestions.clear()
+//                    Log.e("citySuggestions","Đã xoá danh sách")
+//                    Log.e("citySuggestions",citySuggestions.toString())
+//                    //autoCompleteAdapter.notifyDataSetChanged()
+//                }
+//
+//            }
+//
+//            override fun afterTextChanged(p0: Editable?) {
+//                // Cập nhật lại Adapter sau khi thay đổi văn bản
+//                autoCompleteAdapter.notifyDataSetChanged()
+//            }
+//
+//        })
     }
 
     private fun performAutocompleteSearch(searchQuery: String) {

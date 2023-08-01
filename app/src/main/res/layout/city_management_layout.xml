@@ -4,6 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.CityManagementActivity">
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/sky" />
 
     <RelativeLayout
         android:id="@+id/parentRelative"
@@ -43,6 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/btn_Back"
+            android:textColor="@color/white"
             android:layout_marginStart="@dimen/_10sdp"
             android:text="Quản lý thành phố"
             android:textSize="@dimen/_30sdp" />
@@ -53,6 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/btn_Cancel"
             android:layout_marginStart="@dimen/_10sdp"
+            android:textColor="@color/white"
             android:text="Các mục đã chọn"
             android:textSize="@dimen/_30sdp"
             android:visibility="gone" />
@@ -101,6 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textColor="@color/white"
             android:text="Xoá"
             android:textSize="@dimen/_15sdp" />
     </LinearLayout>

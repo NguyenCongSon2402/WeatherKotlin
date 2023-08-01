@@ -3,6 +3,7 @@ package com.example.weatherkotlin.ui.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -58,6 +59,47 @@ class Fragment1 : Fragment() {
         val weatherRVAdapter = WeatherRVAdapter()
         recyclerView.adapter = weatherRVAdapter
 
+        // tạo một OnItemTouchListener để  xử lí sự kiện chạm trên các item trong recycview
+        recyclerView.addOnItemTouchListener(object :RecyclerView.OnItemTouchListener{
+            // khởi tạo biến startX để lưu trữ giá trị toạ độ X của điểm chạm lần đầu tiên màn hình
+            private var startX=0f
+
+            // phương thức onInterceptTouchEvent được gọi khi sự kiện chạm diễn ra trong recycview
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                // xử lí các sự kiện ACTION_DOWN, ACTION_MOVE , ACTION_UP của MotionEvent
+                when(e.action){
+                    MotionEvent.ACTION_DOWN->{
+                        // Lưu giá trị toạ độ X của điểm chạm đầu tiên
+                        startX=e.x
+                    }
+                    MotionEvent.ACTION_MOVE->{
+                        // xác định xem recycview có thể cuộn sang phải hay sang trái không
+                        val isScrollingRight=e.x<startX
+                        val isScrollingToLeft=isScrollingRight && recyclerView.canScrollRight
+                        val  isScrollingToRight=!isScrollingRight && recyclerView.canScrollLeft
+                        // Nếu có thể cuộn sang phải hoặc sang trái, yêu cầu cha của RecyclerView không can thiệp vào sự kiện chạm
+                        recyclerView.parent.requestDisallowInterceptTouchEvent(isScrollingToRight|| isScrollingToLeft)
+                    }
+                    MotionEvent.ACTION_UP->{
+                        // đặt lại giá trị của startX để về 0 khi sự kiện chạm kết thúc
+                        startX=0f
+                    }
+                    // nếu không phải sự kiện này thì ko lm j cả
+                    else-> Unit
+                }
+                // trả về false để tiếp tục xử l các sự kiện khác nếu có
+                return false
+            }
+
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
+            }
+
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+            }
+
+        })
+
+
 
         // Lấy dữ liệu từ Bundle và hiển thị lên TextView
         val bundle = arguments
@@ -109,7 +151,11 @@ class Fragment1 : Fragment() {
 
         return rootView
     }
+    private val RecyclerView.canScrollRight: Boolean
+        get() = canScrollHorizontally(SCROLL_DIRECTION_RIGHT)
 
+    private val RecyclerView.canScrollLeft: Boolean
+        get() = canScrollHorizontally(SCROLL_DIRECTION_LEFT)
     private fun navigateToNewActivity() {
         val intent = Intent(requireContext(), WeatherForecastActivity::class.java)
         startActivity(intent)
@@ -127,6 +173,8 @@ class Fragment1 : Fragment() {
             fragment.arguments = bundle
             return fragment
         }
+        private const val SCROLL_DIRECTION_RIGHT = 1
+        private const val SCROLL_DIRECTION_LEFT = -1
     }
 
     // Hàm chuyển đổi ngày tháng thành thứ
