@@ -8,7 +8,7 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherkotlin.R
-import com.example.weatherkotlin.interfaces.RecyclerViewItemClickListener
+import com.example.weatherkotlin.ui.interfaces.RecyclerViewItemClickListener
 import java.lang.Exception
 
 class CityManagementAdapter(

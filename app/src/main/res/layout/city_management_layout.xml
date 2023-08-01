@@ -58,13 +58,14 @@
             android:visibility="gone" />
     </RelativeLayout>
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/editTextSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/parentRelative"
         android:layout_margin="@dimen/_15sdp"
         android:background="@drawable/transparent_background"
+        android:completionThreshold="1"
         android:drawableLeft="@drawable/baseline_search_24"
         android:drawablePadding="@dimen/_10sdp"
         android:hint="Nhập vị trí..."

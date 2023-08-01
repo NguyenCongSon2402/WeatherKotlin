@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherkotlin.data.model.CurrentWeather
 import com.example.weatherkotlin.data.model1.CitySearch.CurrentConditions
 import com.example.weatherkotlin.data.model1.FiveDayForecast.FiveDayForecast
 import com.example.weatherkotlin.data.model1.GeopositionSearch.CityResponse
