@@ -1,6 +1,7 @@
 package com.example.weatherkotlin.ui.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +9,16 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherkotlin.R
+import com.example.weatherkotlin.data.model1.WeatherCityData.WeatherCityData
 import com.example.weatherkotlin.ui.interfaces.RecyclerViewItemClickListener
 import java.lang.Exception
+import java.util.ArrayList
 
 class CityManagementAdapter(
     private val itemLongClickListener: RecyclerViewItemClickListener,
-    private val txt_SelectedItem: TextView
+    private val txt_SelectedItem: TextView,
+    private val data: ArrayList<WeatherCityData>?,
+    private val CitiesList: ArrayList<String>
 ) :
     RecyclerView.Adapter<CityManagementAdapter.CityHolder>() {
     private lateinit var context: Context
@@ -22,6 +27,7 @@ class CityManagementAdapter(
     private val temperature = arrayListOf("31°", "31°", "31°", "31°")
     private val temperature1 = arrayListOf("31°/25°", "31°/25°", "31°/25°", "31°/25°")
     private val selectedItems = mutableListOf<Int>()
+
 
     inner class CityHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var txt_location: TextView = itemView.findViewById(R.id.txt_location)
@@ -64,15 +70,22 @@ class CityManagementAdapter(
     }
 
     override fun getItemCount(): Int {
-        if (location != null)
-            return location.size
+        if (CitiesList != null)
+            return CitiesList.size
         return 0
     }
 
     override fun onBindViewHolder(holder: CityHolder, position: Int) {
-        holder.txt_location.text = location[position]
-        holder.txt_temperature1.text = temperature1[position]
-        holder.txt_temperature.text = temperature[position]
+        //Log.d("city",data.toString())
+        Log.d("city",CitiesList.toString())
+
+// Gán giá trị citiesList vào holder.txt_location.text
+        if (position < CitiesList.size) {
+            holder.txt_location.text = CitiesList[position]
+        } else {
+            // Nếu không tồn tại phần tử tại vị trí position, đặt thành chuỗi rỗng hoặc một giá trị mặc định khác
+            holder.txt_location.text = ""
+        }
 
         holder.checkBoxDelete.isChecked = selectedItems.contains(position)
         if (isEditMode) {
@@ -112,9 +125,9 @@ class CityManagementAdapter(
         try {
             // Sử dụng hàm reversed() để đảo ngược thứ tự của danh sách, giúp xóa các phần tử từ cuối danh sách về đầu.
             for (position in selectedItems.reversed()) {
-                location.removeAt(position)
-                temperature.removeAt(position)
-                temperature1.removeAt(position)
+                CitiesList.removeAt(position)
+                //temperature.removeAt(position)
+                //temperature1.removeAt(position)
             }
             selectedItems.clear() // Xóa tất cả các phần tử đã chọn
         } catch (e: Exception) {

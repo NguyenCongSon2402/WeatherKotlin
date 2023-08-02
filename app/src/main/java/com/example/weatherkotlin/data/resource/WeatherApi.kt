@@ -1,6 +1,7 @@
 package com.example.weatherkotlin.data.resource
 
-import com.example.weatherkotlin.data.model1.CitySearch.CurrentConditions
+import com.example.weatherkotlin.data.model1.CitySearch.CitySearch
+import com.example.weatherkotlin.data.model1.CurrentConditions.CurrentConditions
 import com.example.weatherkotlin.data.model1.FiveDayForecast.FiveDayForecast
 import com.example.weatherkotlin.data.model1.GeopositionSearch.CityResponse
 import com.example.weatherkotlin.data.model1.HourlyForecasts.HourlyForecasts
@@ -48,6 +49,13 @@ interface WeatherApi {
         @Query("toplevel") toplevel: Boolean
     ): Response<CityResponse?>
 
+    //http://dataservice.accuweather.com/locations/v1/cities/search?apikey=eAqGlkcrfWwMVlKJi6IuFnh5CqtA7GAZ&q=H%C3%A0%20n%E1%BB%99i&language=vi
+    @GET("locations/v1/cities/search")
+    suspend fun getCity(
+        @Query("apikey") apiKey: String,
+        @Query("q") key: String?,
+        @Query("language") language: String
+    ): Response<List<CitySearch>?>
 
     //http://dataservice.accuweather.com/forecasts/v1/daily/5day/355085?apikey=GOgW2GTASsOXbhRWHGixmVA5fYFBohAp&language=vi&details=true
     @GET("forecasts/v1/daily/5day/{key}")

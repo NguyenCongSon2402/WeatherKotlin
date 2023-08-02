@@ -1,11 +1,12 @@
 package com.example.weatherkotlin.ui.viewmodel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherkotlin.data.model1.CitySearch.CurrentConditions
+import com.example.weatherkotlin.data.model1.CurrentConditions.CurrentConditions
 import com.example.weatherkotlin.data.model1.FiveDayForecast.FiveDayForecast
 import com.example.weatherkotlin.data.model1.GeopositionSearch.CityResponse
 import com.example.weatherkotlin.data.model1.GeopositionSearch.LocationRequestBody
@@ -13,6 +14,7 @@ import com.example.weatherkotlin.data.model1.HourlyForecasts.HourlyForecasts
 import com.example.weatherkotlin.data.repository.WeatherRepository
 import com.example.weatherkotlin.data.repository.WeatherRepositoryImp
 import com.example.weatherkotlin.data.resource.Result
+import com.google.gson.Gson
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -61,6 +63,8 @@ class MainActivityViewModel(
                     // Lưu trữ thông tin cityInfo trong LiveData _cityInfo
                     _cityInfo.postValue(resultCity1.data)
                     val key = resultCity1.data?.Key.toString()
+                    val nameCity=resultCity1.data?.LocalizedName
+
                     Log.d("SUSSEC", resultCity1.data?.Key.toString())
 
                     // Tiếp tục lấy dữ liệu thời tiết với đầu vào từ hàm repository.getCityFromLocation

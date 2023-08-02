@@ -1,6 +1,7 @@
 package com.example.weatherkotlin.data.resource
 
 import com.example.weatherkotlin.data.repository.LoggingInterceptor
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,6 +25,7 @@ object RetrofitHelper {
             .baseUrl(BASE_URL1)
             .client(okHttpClient) // Sử dụng OkHttpClient đã cấu hình
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
     }
 

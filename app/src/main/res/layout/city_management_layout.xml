@@ -76,8 +76,9 @@
         android:drawableLeft="@drawable/baseline_search_24"
         android:drawablePadding="@dimen/_10sdp"
         android:hint="Nhập vị trí..."
-        android:imeOptions="actionDone"
+        android:imeOptions="actionSearch"
         android:paddingLeft="@dimen/_10sdp"
+        android:inputType="text"
         android:textSize="@dimen/_20sdp" />
 
     <androidx.recyclerview.widget.RecyclerView

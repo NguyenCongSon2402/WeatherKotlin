@@ -1,4 +1,4 @@
-package com.example.weatherkotlin.data.model1.CitySearch
+package com.example.weatherkotlin.data.model1.CurrentConditions
 
 import com.google.gson.annotations.SerializedName
 

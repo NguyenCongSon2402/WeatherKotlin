@@ -1,21 +1,34 @@
 package com.example.weatherkotlin.ui
 
+import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherkotlin.R
+import com.example.weatherkotlin.data.model1.CurrentConditions.CurrentConditions
+import com.example.weatherkotlin.data.model1.FiveDayForecast.FiveDayForecast
+import com.example.weatherkotlin.data.model1.HourlyForecasts.HourlyForecasts
+import com.example.weatherkotlin.data.model1.WeatherCityData.WeatherCityData
 import com.example.weatherkotlin.ui.adapter.CityManagementAdapter
 import com.example.weatherkotlin.ui.interfaces.RecyclerViewItemClickListener
+import com.example.weatherkotlin.ui.viewmodel.CityViewModel
+import com.example.weatherkotlin.ui.viewmodel.MainActivityViewModel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.lang.Exception
+import java.util.ArrayList
 
 class CityManagementActivity : AppCompatActivity(), RecyclerViewItemClickListener {
 
@@ -30,9 +43,10 @@ class CityManagementActivity : AppCompatActivity(), RecyclerViewItemClickListene
     private lateinit var layout_delete: LinearLayout
     private lateinit var adapter: CityManagementAdapter
     private lateinit var autoCompleteAdapter: ArrayAdapter<String>
+    private lateinit var cityViewModel: CityViewModel
     private val citySuggestions = mutableListOf<String>()
     private val COUNTRIES = arrayOf(
-        "Belgium", "France", "Italy", "Germany", "Spain","Hanoi",
+        "Belgium", "France", "Italy", "Germany", "Spain", "Hanoi",
         "Ho Chi Minh City",
         "Tokyo",
         "New York",
@@ -62,8 +76,10 @@ class CityManagementActivity : AppCompatActivity(), RecyclerViewItemClickListene
         val itemLongClickListener: RecyclerViewItemClickListener = this
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = layoutManager
+        val data = readDataFromSharedPreferences()
+        val CitiesList = getCitiesListFromSharedPreferences()
 
-        adapter = CityManagementAdapter(itemLongClickListener, txt_SelectedItem)
+        adapter = CityManagementAdapter(itemLongClickListener, txt_SelectedItem, data, CitiesList)
         recyclerView.adapter = adapter
         btn_Back.setOnClickListener {
             onBackPressed()
@@ -84,6 +100,7 @@ class CityManagementActivity : AppCompatActivity(), RecyclerViewItemClickListene
             // Cập nhật trạng thái của adapter
             adapter.setEditMode(false)
         }
+
         // Xử lý sự kiện khi nhấn nút Select All (chọn tất cả checkbox)
         btn_selectAll.setOnClickListener {
             if (adapter.getSelectedItems().size == adapter.itemCount) {
@@ -111,40 +128,132 @@ class CityManagementActivity : AppCompatActivity(), RecyclerViewItemClickListene
         }
         // Khởi tạo Adapter và gán cho AutoCompleteTextView
         //val suggestions = mutableListOf<String>() // Danh sách gợi ý tìm kiếm
-        autoCompleteAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, COUNTRIES)
+        autoCompleteAdapter =
+            ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, COUNTRIES)
         editTextSearch.setAdapter(autoCompleteAdapter)
 
-//        editTextSearch.addTextChangedListener(object :TextWatcher{
-//            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//            }
-//
-//            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                val searchQuery=p0.toString().trim()
-//                if (searchQuery.isNotEmpty()){
-//                    performAutocompleteSearch(searchQuery)
-//                    autoCompleteAdapter.notifyDataSetChanged()
-//                    Log.e("citySuggestions","Đã thay đổi dữ liệu")
-//                }else if (searchQuery.isEmpty()){
-//                    // Nếu trường AutoCompleteTextView rỗng, xoá danh sách gợi ý tìm kiếm
-//                    citySuggestions.clear()
-//                    Log.e("citySuggestions","Đã xoá danh sách")
-//                    Log.e("citySuggestions",citySuggestions.toString())
-//                    //autoCompleteAdapter.notifyDataSetChanged()
-//                }
-//
-//            }
-//
-//            override fun afterTextChanged(p0: Editable?) {
-//                // Cập nhật lại Adapter sau khi thay đổi văn bản
-//                autoCompleteAdapter.notifyDataSetChanged()
-//            }
-//
-//        })
+        editTextSearch.setOnEditorActionListener { _, acTionId, _ ->
+            if (acTionId == EditorInfo.IME_ACTION_SEARCH) {
+                val searchQuery = editTextSearch.text.trim().toString()
+                cityViewModel = ViewModelProvider(this).get(CityViewModel::class.java)
+                cityViewModel.loadCityWeather(searchQuery)
+                setupObserver()
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
     }
+
+    private fun readDataFromSharedPreferences(): ArrayList<WeatherCityData>? {
+        // lấy dữ liệu JSON string từ SharedPreferences
+        val sharedPreferences = getSharedPreferences("WeatherData", Context.MODE_PRIVATE)
+        val dataListJson = sharedPreferences.getString("DataListJson", "")
+        if (dataListJson != null && dataListJson.isNotEmpty()) {
+            val gson = Gson()
+            val dataListType = object : TypeToken<ArrayList<WeatherCityData>>() {}.type
+            val dataList: ArrayList<WeatherCityData> = gson.fromJson(dataListJson, dataListType)
+            return dataList
+        }
+        return null
+    }
+
+    private fun setupObserver() = try {
+        var currentWeather: List<CurrentConditions>? = null
+        var hourlyForecast: List<HourlyForecasts>? = null
+        var fiveDayForecast: FiveDayForecast? = null
+
+        cityViewModel.cityInfo.observe(this) {
+            if (it == null) {
+                Toast.makeText(this, cityViewModel.errorTry.value?.toString()!!, Toast.LENGTH_LONG)
+                    .show()
+            } else {
+
+                val citiesList = ArrayList<String>()
+                citiesList.add(it.get(0)?.LocalizedName.toString())
+                updateCitiesList(it[0]?.LocalizedName.toString())
+                citySuggestions.add(it.get(0)?.LocalizedName.toString())
+
+
+            }
+        }
+        cityViewModel.currentWeatherLiveData.observe(this) {
+            if (it == null) {
+                Toast.makeText(this, cityViewModel.error.value?.message!!, Toast.LENGTH_LONG)
+                    .show()
+
+            } else {
+                currentWeather = it
+                Log.e("Đã cập nhập xong1", it[0].Temperature?.Metric?.Value.toString())
+            }
+
+        }
+
+
+        cityViewModel.HourlyForecast.observe(this) {
+            if (it == null) {
+                Toast.makeText(this, cityViewModel.error.value?.message!!, Toast.LENGTH_LONG)
+                    .show()
+            } else {
+                hourlyForecast = it
+                Log.e("Đã cập nhập xong2", it[0].Temperature?.Value.toString())
+                checkAndRenderData(currentWeather, hourlyForecast, fiveDayForecast)
+            }
+
+        }
+        cityViewModel.FiveDayForecastLiveData.observe(this) {
+            if (it == null) {
+                Toast.makeText(this, cityViewModel.error.value?.message!!, Toast.LENGTH_LONG)
+                    .show()
+            } else {
+                fiveDayForecast = it
+                Log.e("Đã cập nhập xong3", it.Headline?.Text.toString())
+                checkAndRenderData(currentWeather, hourlyForecast, fiveDayForecast)
+            }
+
+        }
+
+    } catch (e: Exception) {
+        Toast.makeText(this, "Lỗi trong quá trình lấy data API", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun checkAndRenderData(
+        currentWeather: List<CurrentConditions>?,
+        hourlyForecast: List<HourlyForecasts>?,
+        fiveDayForecast: FiveDayForecast?
+    ) {
+        if (currentWeather != null && hourlyForecast != null && fiveDayForecast != null) {
+            val weatherCityData = WeatherCityData(currentWeather, hourlyForecast, fiveDayForecast)
+//            dataList.add(weatherCityData)
+//            saveDataToSharedPreferences(dataList)
+//            renderList(dataList)
+        }
+    }
+
+    private fun getCitiesListFromSharedPreferences(): ArrayList<String> {
+        val sharedPreferences = getSharedPreferences("City", Context.MODE_PRIVATE)
+        val citiesSet = sharedPreferences.getStringSet("citiesList", emptySet())
+        return ArrayList(citiesSet)
+    }
+
+    fun updateCitiesList(newCityName: String) {
+        // Lấy danh sách thành phố từ SharedPreferences
+        val sharedPreferences = getSharedPreferences("City", Context.MODE_PRIVATE)
+        val citiesList =
+            sharedPreferences.getStringSet("citiesList", mutableSetOf())?.toMutableSet()
+
+        // Thêm giá trị mới vào danh sách
+        citiesList?.add(newCityName)
+
+        // Lưu lại danh sách mới vào SharedPreferences
+        sharedPreferences.edit()
+            .putStringSet("citiesList", citiesList)
+            .apply()
+    }
+
 
     private fun performAutocompleteSearch(searchQuery: String) {
         citySuggestions.clear()
-        Log.e("searchQuery",searchQuery)
+        Log.e("searchQuery", searchQuery)
 
         // Fake dữ liệu tên thành phố - đây chỉ là ví dụ, bạn có thể sử dụng dữ liệu thực từ API
         val fakeCities = listOf(
@@ -163,7 +272,7 @@ class CityManagementActivity : AppCompatActivity(), RecyclerViewItemClickListene
         for (city in fakeCities) {
             if (city.startsWith(searchQuery, ignoreCase = true)) {
                 citySuggestions.add(city)
-                Log.e("citySuggestions",citySuggestions.toString())
+                Log.e("citySuggestions", citySuggestions.toString())
             }
         }
 

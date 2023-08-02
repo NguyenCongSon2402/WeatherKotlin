@@ -24,7 +24,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 
 import com.example.weatherkotlin.R
-import com.example.weatherkotlin.data.model1.CitySearch.CurrentConditions
+import com.example.weatherkotlin.data.model1.CurrentConditions.CurrentConditions
 import com.example.weatherkotlin.data.model1.FiveDayForecast.FiveDayForecast
 import com.example.weatherkotlin.data.model1.GeopositionSearch.LocationRequestBody
 import com.example.weatherkotlin.data.model1.HourlyForecasts.HourlyForecasts
@@ -68,7 +68,8 @@ class MainActivity : AppCompatActivity() {
             Log.d("Hiển thị dữ liệu đã lưu", data.toString())
             Toast.makeText(this,"Hiển thị dữ liệu đã lưu",Toast.LENGTH_LONG).show()
             // Hiển thị dữ liệu từ SharedPreferences lên UI
-            showDataOnUI(data)
+            //showDataOnUI(data)
+            checkLocationPermission()
         } else {
             Log.d("LOIII", "KO CO DATA")
             // Kiểm tra kết nối internet
@@ -171,6 +172,23 @@ class MainActivity : AppCompatActivity() {
         var currentWeather: List<CurrentConditions>? = null
         var hourlyForecast: List<HourlyForecasts>? = null
         var fiveDayForecast: FiveDayForecast? = null
+
+        weatherViewModel.cityInfo.observe(this){
+            if (it == null){
+                Toast.makeText(this, weatherViewModel.errorTry.value?.toString()!!, Toast.LENGTH_LONG)
+                    .show()
+            }
+            else{
+
+                val citiesList = ArrayList<String>()
+                citiesList.add(it.LocalizedName.toString())
+                // Lưu giá trị nameCity vào SharedPreferences
+                getSharedPreferences("City", Context.MODE_PRIVATE)
+                    .edit()
+                    .putStringSet("citiesList", citiesList.toSet())
+                    .apply()
+            }
+        }
         weatherViewModel.currentWeatherLiveData.observe(this) {
             title_update.visibility = View.VISIBLE
             if (it == null) {
@@ -290,6 +308,7 @@ class MainActivity : AppCompatActivity() {
         popupMenu.show()
     }
 
+    //tach check permission vs lat lon rieng. Lay xong thi moi goi den lay du lieu
     private fun checkLocationPermission() {
         Log.d("LOIII", "KO CO DATA2")
         // kiểm tra xem quyền cấp vị trí chính xác đã được cấp hay chưa
@@ -300,7 +319,7 @@ class MainActivity : AppCompatActivity() {
             // Quyền đã được cấp
             Log.d("LOIII", "KO CO DATA3")
             fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-                Log.d("LOIII", "KO CO DATA3")
+                Log.d("LOIII", "KO CO DATA3.1")
                 if (location != null) {
                     Log.d("LOIII", "KO CO DATA4")
                     // đã lấy được vị trí
@@ -310,7 +329,7 @@ class MainActivity : AppCompatActivity() {
 
                     Log.e("Location", locationRequestBody.toString())
                     Toast.makeText(this, locationRequestBody.toString(), Toast.LENGTH_SHORT).show()
-                    setUpViewModel()
+                    setUpViewModel() // tach ra ham khac
 
                 }
             }.addOnFailureListener { exception ->
@@ -352,7 +371,26 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == LOCATION_PERMISSION_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Quyền truy cập vị trí chính xác đã được cấp
-                checkLocationPermission()
+               //goi ham logic o day
+                fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+                    Log.d("LOIII", "KO CO DATA3.1")
+                    if (location != null) {
+                        Log.d("LOIII", "KO CO DATA4")
+                        // đã lấy được vị trí
+                        val latitude = location.latitude
+                        val longitude = location.longitude
+                        locationRequestBody = LocationRequestBody(latitude, longitude)
+
+                        Log.e("Location", locationRequestBody.toString())
+                        Toast.makeText(this, locationRequestBody.toString(), Toast.LENGTH_SHORT).show()
+                        setUpViewModel() // tach ra ham khac
+
+                    }
+                }.addOnFailureListener { exception ->
+                    Log.e("Location", "Có lỗi xảy ra khi lấy vị trí", exception)
+                    val intent = Intent(this, CityManagementActivity::class.java)
+                    startActivity(intent)
+                }
 
             } else {
                 // Người dùng từ chối cấp quyền vị trí chính xác

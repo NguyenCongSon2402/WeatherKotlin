@@ -1,6 +1,6 @@
 package com.example.weatherkotlin.data.model1.WeatherCityData
 
-import com.example.weatherkotlin.data.model1.CitySearch.CurrentConditions
+import com.example.weatherkotlin.data.model1.CurrentConditions.CurrentConditions
 import com.example.weatherkotlin.data.model1.FiveDayForecast.FiveDayForecast
 import com.example.weatherkotlin.data.model1.HourlyForecasts.HourlyForecasts
 
