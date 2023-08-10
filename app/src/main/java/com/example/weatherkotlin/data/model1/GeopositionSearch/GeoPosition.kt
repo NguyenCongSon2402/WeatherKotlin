@@ -7,6 +7,6 @@ data class GeoPosition (
 
   @SerializedName("Latitude"  ) var Latitude  : Double?    = null,
   @SerializedName("Longitude" ) var Longitude : Double?    = null,
-  @SerializedName("Elevation" ) var Elevation : Elevation? = Elevation()
+  //@SerializedName("Elevation" ) var Elevation : Elevation? = Elevation()
 
 )

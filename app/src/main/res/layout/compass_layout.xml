@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_70sdp"
-    android:layout_margin="@dimen/_5sdp"
+    android:layout_marginBottom="@dimen/_2sdp"
     android:layout_weight="1"
     android:background="@drawable/transparent_background">
 
@@ -13,12 +13,14 @@
         android:layout_marginStart="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_15sdp"
         android:text="Tây"
+        android:textStyle="bold"
         android:textColor="@color/white"
         android:textSize="@dimen/_11sdp" />
 
     <TextView
         android:id="@+id/speeds"
         android:layout_width="wrap_content"
+        android:textStyle="bold"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="@dimen/_5sdp"

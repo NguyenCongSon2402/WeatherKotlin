@@ -3,8 +3,8 @@
     android:id="@+id/layout_dubao"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_145sdp"
-    android:background="@drawable/transparent_background"
     android:layout_below="@+id/text_fragment"
+    android:background="@drawable/transparent_background"
     android:orientation="vertical"
     android:padding="@dimen/_5sdp">
 
@@ -13,6 +13,7 @@
         android:layout_height="@dimen/_25sdp">
 
         <TextView
+            android:id="@+id/Humidity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -31,7 +32,9 @@
             android:layout_centerVertical="true"
             android:text="57%"
             android:textColor="@color/white"
-            android:textSize="@dimen/_10sdp" />
+
+            android:textSize="@dimen/_10sdp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -39,6 +42,7 @@
         android:layout_height="@dimen/_25sdp">
 
         <TextView
+            android:id="@+id/RealFeelTemperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -55,8 +59,10 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:text="31°"
+
             android:textColor="@color/white"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -64,6 +70,7 @@
         android:layout_height="@dimen/_25sdp">
 
         <TextView
+            android:id="@+id/UVIndex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -81,7 +88,9 @@
             android:layout_centerVertical="true"
             android:text="3"
             android:textColor="@color/white"
-            android:textSize="@dimen/_10sdp" />
+
+            android:textSize="@dimen/_10sdp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -104,9 +113,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+
             android:text="1007mbar"
+
             android:textColor="@color/white"
-            android:textSize="@dimen/_10sdp" />
+            android:textSize="@dimen/_10sdp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -129,6 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:textStyle="bold"
             android:text="25%"
             android:textColor="@color/white"
             android:textSize="@dimen/_10sdp" />

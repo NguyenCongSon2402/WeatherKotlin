@@ -1,223 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipeRefreshLayout"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/_11sdp"
+    android:fillViewport="true">
 
-    <ScrollView
-        android:id="@+id/scrollView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/_11sdp">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <TextView
+            android:id="@+id/txt_temperature"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_105sdp"
+            android:gravity="center"
+            android:text="31°C"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_60sdp" />
 
-            <TextView
-                android:id="@+id/txt_temperature"
+        <TextView
+            android:id="@+id/text_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_temperature"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="Haze"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15sdp" />
+
+        <!-- Thêm các view khác tùy ý -->
+        <LinearLayout
+            android:id="@+id/layout_dubao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_fragment"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_160sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:background="@drawable/transparent_background"
+            android:elevation="@dimen/_8sdp"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/icon1"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:src="@drawable/img_rain" />
+
+                <TextView
+                    android:id="@+id/txt_today"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_toStartOf="@+id/txt_temperature_today"
+                    android:layout_toEndOf="@+id/icon1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Hôm nay  Mưa"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/txt_temperature_today"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="31° / 25°"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/icon2"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:src="@drawable/img_rain" />
+
+                <TextView
+                    android:id="@+id/txt_Tomorrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_toStartOf="@+id/txt_temperatureTomorrow"
+                    android:layout_toEndOf="@+id/icon2"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Ngày mai Dông"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_temperatureTomorrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:textStyle="bold"
+                    android:text="31° / 25°"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/icon3"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:src="@drawable/img_rain" />
+
+                <TextView
+                    android:id="@+id/txt_afterTomorrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_toStartOf="@+id/txt_temperatureAfterTomorrow"
+                    android:layout_toEndOf="@+id/icon3"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Thu 6  Mưa"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_temperatureAfterTomorrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="31° / 25°"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btn_next"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_105sdp"
-                android:gravity="center"
-                android:text="31°C"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_60sdp" />
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/transparent_background"
+                android:text="Dự báo 5 ngày"
+                android:textStyle="bold"
+                android:textSize="@dimen/_17sdp" />
 
-            <TextView
-                android:id="@+id/text_fragment"
+        </LinearLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/RvWeatherParent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/layout_dubao"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_15sdp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/RvWeather"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/weather_rv_item" />
+        </androidx.core.widget.NestedScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/RvWeatherParent"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txt_temperature"
-                android:layout_centerHorizontal="true"
-                android:gravity="center"
-                android:text="Haze"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_15sdp" />
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <!-- Thêm các view khác tùy ý -->
-            <LinearLayout
-                android:id="@+id/layout_dubao"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_fragment"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:layout_marginTop="@dimen/_160sdp"
-                android:layout_marginEnd="@dimen/_15sdp"
-                android:background="@drawable/transparent_background"
-                android:elevation="@dimen/_8sdp"
-                android:orientation="vertical"
-                android:padding="15dp">
+                <include layout="@layout/compass_layout" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/nightModeIcon"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="@dimen/_30sdp"
-                        android:padding="@dimen/_5sdp"
-                        android:src="@drawable/img_rain" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txt_today"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_toEndOf="@+id/nightModeIcon"
-                        android:text="Hôm nay  Mưa"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_12sdp"
-                        android:textStyle="bold" />
-
-
-                    <TextView
-                        android:id="@+id/txt_temperature_today"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:text="31° / 25°"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_12sdp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/iconLogut"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="@dimen/_30sdp"
-                        android:padding="@dimen/_5sdp"
-                        android:src="@drawable/img_rain" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txt_Tomorrow"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_toEndOf="@+id/iconLogut"
-                        android:text="Ngày mai Dông"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_12sdp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/txt_temperatureTomorrow"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:text="31° / 25°"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_12sdp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/Forgotpassword"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="@dimen/_30sdp"
-                        android:padding="@dimen/_5sdp"
-                        android:src="@drawable/img_rain" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txt_afterTomorrow"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_toEndOf="@+id/Forgotpassword"
-                        android:text="Thu 6  Mưa"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_12sdp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/txt_temperatureAfterTomorrow"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:text="31° / 25°"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_12sdp" />
-                </RelativeLayout>
-
-                <Button
-                    android:id="@+id/btn_next"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:background="@drawable/transparent_background"
-                    android:text="Dự báo 5 ngày"
-                    android:textSize="@dimen/_17sdp" />
-
+                <include layout="@layout/sunset_layout" />
             </LinearLayout>
 
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/RvWeatherParent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/layout_dubao">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/RvWeather"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/weather_rv_item" />
-            </androidx.core.widget.NestedScrollView>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/RvWeatherParent"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <include layout="@layout/compass_layout" />
-
-                    <include layout="@layout/sunset_layout" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <include layout="@layout/cardview_layout" />
-
-
-                </LinearLayout>
+                <include layout="@layout/cardview_layout" />
 
 
             </LinearLayout>
 
 
-        </RelativeLayout>
+        </LinearLayout>
 
 
-    </ScrollView>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </RelativeLayout>
+
+
+</androidx.core.widget.NestedScrollView>
+
 

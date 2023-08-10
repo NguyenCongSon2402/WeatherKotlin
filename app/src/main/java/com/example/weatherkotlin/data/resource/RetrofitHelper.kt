@@ -1,8 +1,12 @@
 package com.example.weatherkotlin.data.resource
 
+import android.content.Context
+
 import com.example.weatherkotlin.data.repository.LoggingInterceptor
+import com.intuit.sdp.BuildConfig
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -28,5 +32,7 @@ object RetrofitHelper {
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
     }
+
+
 
 }

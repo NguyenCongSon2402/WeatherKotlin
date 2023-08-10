@@ -1,90 +1,99 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/parentRelative"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
-    <!-- Đặt gifImageView trước các phần tử khác -->
-    <pl.droidsonroids.gif.GifImageView
+
+    <RelativeLayout
+        android:id="@+id/parentRelative"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/sky" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/title_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:text="Hà Nội"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_22sdp" />
+        <!-- Đặt gifImageView trước các phần tử khác -->
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/sky" />
 
-    <TextView
-        android:id="@+id/title_update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title_fragment"
-        android:layout_centerHorizontal="true"
-        android:text="Đang cập nhập"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_10sdp"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/title_updateSucces"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title_fragment"
-        android:layout_centerHorizontal="true"
-        android:text="Cập nhập thành công"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_10sdp"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/img_wifiOff"
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/baseline_wifi_off_24"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/title_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="@dimen/_22sdp" />
 
 
-    <ImageView
-        android:id="@+id/image_overflowMenu"
-        android:layout_width="@dimen/_22sdp"
-        android:layout_height="@dimen/_25sdp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:layout_marginEnd="@dimen/_15sdp"
-        android:src="@drawable/overflow_menu" />
+        <ImageView
+            android:id="@+id/img_wifiOff"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/baseline_wifi_off_24"
+            android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/image_add"
-        android:layout_width="@dimen/_25sdp"
-        android:layout_height="@dimen/_25sdp"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginLeft="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:layout_marginBottom="@dimen/_15sdp"
-        android:src="@drawable/baseline_add_24" />
 
-    <me.relex.circleindicator.CircleIndicator3
-        android:id="@+id/indicator"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_15sdp"
-        android:layout_below="@+id/title_fragment" />
+        <ImageView
+            android:id="@+id/image_overflowMenu"
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:src="@drawable/overflow_menu" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_paper2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/title_fragment"
-        android:layout_centerInParent="true" />
+        <ImageView
+            android:id="@+id/image_add"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:src="@drawable/baseline_add_24" />
 
-</RelativeLayout>
+        <me.relex.circleindicator.CircleIndicator3
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_15sdp"
+            android:layout_below="@+id/title_fragment" />
+
+        <androidx.viewpager2.widget.ViewPager2
+
+            android:id="@+id/view_paper2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/title_fragment"
+            android:layout_centerInParent="true" />
+        <TextView
+            android:id="@+id/title_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_fragment"
+            android:layout_centerHorizontal="true"
+            android:text="Đang cập nhập"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/title_updateSucces"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_fragment"
+            android:layout_centerHorizontal="true"
+            android:text="Cập nhập thành công"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -11,27 +11,23 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface WeatherApi {
-    //http://dataservice.accuweather.com/currentconditions/v1/355085?apikey=XfZd5b8QoXAXCkH6o5NQ2Fu4jrM0zosQ&language=vi
-
-    // Geoposition Search
-    //https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=XfZd5b8QoXAXCkH6o5NQ2Fu4jrM0zosQ&q=20.429,106.175&language=vi&details=false&toplevel=true
-//    @GET("currentconditions/v1/{key}?apikey=XfZd5b8QoXAXCkH6o5NQ2Fu4jrM0zosQ&language=vi")
-//    suspend fun getCurrentWeathers(@Path("key") key: String?): Response<List<CurrentConditions>?>
 
     //http://dataservice.accuweather.com/currentconditions/v1/355085?apikey=XfZd5b8QoXAXCkH6o5NQ2Fu4jrM0zosQ&language=vi
     @GET("currentconditions/v1/{key}")
     suspend fun getCurrentWeathers(
         @Path("key") key: String?,
         @Query("apikey") apiKey: String,
-        @Query("language") language: String
-    ): Response<List<CurrentConditions>?>
+        @Query("language") language: String,
+        @Query("details") details: Boolean
+    ): Response<ArrayList<CurrentConditions>?>
 
     //http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/355085?apikey=G4WMi1n0ABQjRvy4M6Gkh11z2Ln2O7GQ&language=vi
     @GET("forecasts/v1/hourly/12hour/{key}")
     suspend fun getHourlyForecasts(
         @Path("key") key: String?,
         @Query("apikey") apiKey: String,
-        @Query("language") language: String
+        @Query("language") language: String,
+        @Query("details") details: Boolean
     ): Response<List<HourlyForecasts>?>
 
 

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Imperial (
 
-  @SerializedName("Value"    ) var Value    : Int?    = null,
+  @SerializedName("Value"    ) var Value    : Double?    = null,
   @SerializedName("Unit"     ) var Unit     : String? = null,
   @SerializedName("UnitType" ) var UnitType : Int?    = null
 

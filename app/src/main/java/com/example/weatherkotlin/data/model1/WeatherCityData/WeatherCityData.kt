@@ -5,7 +5,7 @@ import com.example.weatherkotlin.data.model1.FiveDayForecast.FiveDayForecast
 import com.example.weatherkotlin.data.model1.HourlyForecasts.HourlyForecasts
 
 data class WeatherCityData(
-    val currentWeather: List<CurrentConditions>?,
-    val hourlyForecast: List<HourlyForecasts>?,
-    val fiveDayForecast: FiveDayForecast?
+    val currentWeather: List<CurrentConditions>?=null,
+    val hourlyForecast: List<HourlyForecasts>??=null,
+    val fiveDayForecast: FiveDayForecast?=null
 )

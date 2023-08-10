@@ -8,8 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.weatherkotlin.data.model1.CitySearch.CitySearch
 import com.example.weatherkotlin.data.model1.CurrentConditions.CurrentConditions
 import com.example.weatherkotlin.data.model1.FiveDayForecast.FiveDayForecast
-import com.example.weatherkotlin.data.model1.GeopositionSearch.CityResponse
-import com.example.weatherkotlin.data.model1.GeopositionSearch.LocationRequestBody
 import com.example.weatherkotlin.data.model1.HourlyForecasts.HourlyForecasts
 import com.example.weatherkotlin.data.repository.WeatherRepository
 import com.example.weatherkotlin.data.repository.WeatherRepositoryImp
@@ -22,50 +20,46 @@ import java.lang.Exception
 class CityViewModel(
     private val repository: WeatherRepository = WeatherRepositoryImp()
 ) : ViewModel() {
-    private val _currentWeatherLiveData = MutableLiveData<List<CurrentConditions>?>()
-    val currentWeatherLiveData: LiveData<List<CurrentConditions>?> = _currentWeatherLiveData
-    private val _error = MutableLiveData<Exception?>()
-    val error: LiveData<Exception?> = _error
+    private val _currentWeatherLiveData2 = MutableLiveData<List<CurrentConditions>?>()
+    val currentWeatherLiveData2: LiveData<List<CurrentConditions>?> = _currentWeatherLiveData2
+    private val _errorcurrentWeather = MutableLiveData<Exception?>()
+    val errorcurrentWeather: LiveData<Exception?> = _errorcurrentWeather
 
-    private val _errorTry = MutableLiveData<String?>()
-    val errorTry: LiveData<String?> = _errorTry
-    private val _isLoad = MutableLiveData<Boolean>()
-    val isLoad: LiveData<Boolean> = _isLoad
-    private val _cityInfo = MutableLiveData<List<CitySearch>?>()
-    val cityInfo: LiveData<List<CitySearch>?> = _cityInfo
-
-
-    private val _FiveDayForecastLiveData = MutableLiveData<FiveDayForecast?>()
-    val FiveDayForecastLiveData: LiveData<FiveDayForecast?> = _FiveDayForecastLiveData
-
-    private val _error1 = MutableLiveData<Exception?>()
-    val error1: LiveData<Exception?> = _error1
+    private val _errorcityInfo = MutableLiveData<Exception?>()
+    val errorcityInfo: LiveData<Exception?> = _errorcityInfo
+    private val _errorTry2 = MutableLiveData<String?>()
+    val errorTry2: LiveData<String?> = _errorTry2
+    private val _cityInfo2 = MutableLiveData<List<CitySearch>?>()
+    val cityInfo2: LiveData<List<CitySearch>?> = _cityInfo2
 
 
-    private val _HourlyForecastLiveData = MutableLiveData<List<HourlyForecasts>?>()
-    val HourlyForecast: LiveData<List<HourlyForecasts>?> = _HourlyForecastLiveData
+    private val _FiveDayForecastLiveData2 = MutableLiveData<FiveDayForecast?>()
+    val FiveDayForecastLiveData2: LiveData<FiveDayForecast?> = _FiveDayForecastLiveData2
 
-    private val _error2 = MutableLiveData<Exception?>()
-    val error2: LiveData<Exception?> = _error2
+    private val _errorFiveDayForecast = MutableLiveData<Exception?>()
+    val errorFiveDayForecast: LiveData<Exception?> = _errorFiveDayForecast
+
+
+    private val _HourlyForecastLiveData2 = MutableLiveData<List<HourlyForecasts>?>()
+    val HourlyForecast2: LiveData<List<HourlyForecasts>?> = _HourlyForecastLiveData2
+
+    private val _errorHourlyForecast = MutableLiveData<Exception?>()
+    val errorHourlyForecast: LiveData<Exception?> = _errorHourlyForecast
     fun loadCityWeather(q: String?) {
         viewModelScope.launch {
             try {
-                Log.e(
-                    "qPram",
-                    q.toString()
-                )
                 if (q != null) {
 
                     val resultCity = repository.getCity(q)
                     // Kiểm tra kết quả từ hàm repository.getCityFromLocation
                     if (resultCity is Result.Success) {
-                        _cityInfo.postValue(resultCity.data)
+                        _cityInfo2.postValue(resultCity.data)
                         val key = resultCity.data?.get(0)?.Key.toString()
                         Log.d("SUSSEC", key)
 
                         // Tiếp tục lấy dữ liệu thời tiết với đầu vào từ hàm repository.getCityFromLocation
                         // Sử dụng locationRequestBody để lấy thông tin vị trí của thành phố
-                        if (key != null) {
+                        if (!key.isNullOrEmpty()) {
                             Log.d("SUSSEC1", key)
                             val result3 =
                                 coroutineScope { async { repository.getFiveDayForecast(key) } }
@@ -98,41 +92,38 @@ class CityViewModel(
                                     "SUCCES2",
                                     resultFiveDayForecasts.data?.Headline?.Text.toString()
                                 )
-                                _currentWeatherLiveData.postValue(resultCurrentWeather.data)
-                                _error.postValue(null)
+                                _currentWeatherLiveData2.postValue(resultCurrentWeather.data)
+                                _errorcurrentWeather.postValue(null)
 
-                                _HourlyForecastLiveData.postValue(resultHourlyForecasts.data)
-                                _error1.postValue(null)
+                                _HourlyForecastLiveData2.postValue(resultHourlyForecasts.data)
+                                _errorHourlyForecast.postValue(null)
 
-                                _FiveDayForecastLiveData.postValue(resultFiveDayForecasts.data)
-                                _error2.postValue(null)
+                                _FiveDayForecastLiveData2.postValue(resultFiveDayForecasts.data)
+                                _errorFiveDayForecast.postValue(null)
 
-                                _isLoad.postValue(true)
                             } else if (resultCurrentWeather is Result.Error
                                 && resultHourlyForecasts is Result.Error
                                 && resultFiveDayForecasts is Result.Error
                             ) {
-                                _currentWeatherLiveData.postValue(null)
-                                _error.postValue(resultCurrentWeather.exception)
+                                _currentWeatherLiveData2.postValue(null)
+                                _errorcurrentWeather.postValue(resultCurrentWeather.exception)
 
-                                _HourlyForecastLiveData.postValue(null)
-                                _error1.postValue(resultHourlyForecasts.exception)
+                                _HourlyForecastLiveData2.postValue(null)
+                                _errorHourlyForecast.postValue(resultHourlyForecasts.exception)
 
-                                _FiveDayForecastLiveData.postValue(null)
-                                _error2.postValue(resultFiveDayForecasts.exception)
-                                _isLoad.postValue(false)
+                                _FiveDayForecastLiveData2.postValue(null)
+                                _errorFiveDayForecast.postValue(resultFiveDayForecasts.exception)
                                 Log.d("ERROR2", resultHourlyForecasts.exception.toString())
                             }
                         }
 
                     } else if (resultCity is Result.Error) {
-                        _cityInfo.postValue(null)
-                        Log.d("ERROR", "LOI")
-                        _errorTry.postValue(resultCity.exception.toString())
+                        _cityInfo2.postValue(null)
+                        _errorcityInfo.postValue(resultCity.exception)
                     }
                 }
             } catch (e: Exception) {
-                _errorTry.postValue("Lỗi khi tìm kiếm thành phố")
+                _errorTry2.postValue("Lỗi khi tìm kiếm thành phố")
             }
         }
     }
