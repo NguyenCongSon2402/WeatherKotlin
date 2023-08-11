@@ -233,7 +233,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         weatherViewModel.currentWeatherLiveData.observe(this) {
             title_update.visibility = View.VISIBLE
             if (it == null) {
-                weatherViewModel.error2.observe(this) { errorValue ->
+                weatherViewModel.error.observe(this) { errorValue ->
                     errorValue?.let {
                         Toast.makeText(this, "loi $it", Toast.LENGTH_LONG).show()
                     }
@@ -252,7 +252,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
         weatherViewModel.HourlyForecast.observe(this) {
             if (it == null) {
-                weatherViewModel.error2.observe(this) { errorValue ->
+                weatherViewModel.error1.observe(this) { errorValue ->
                     errorValue?.let {
                         Toast.makeText(this, "loi $it", Toast.LENGTH_LONG).show()
                     }
