@@ -47,7 +47,6 @@ class WeatherRepositoryImp : WeatherRepository {
             val qParam =
                 locationRequestBody?.latitude.toString() + "," + locationRequestBody?.longitude.toString()
             Log.e("Q", qParam)
-            val key = "20.999,105.7" // Ví dụ cho vĩ độ 20.429 và kinh độ 106.175
             val language = "vi"
             val details = false
             val toplevel = true
