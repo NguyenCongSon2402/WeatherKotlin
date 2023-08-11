@@ -160,7 +160,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         weatherCityData: WeatherCityData
     ): ArrayList<WeatherCityData>? {
         val dataList = readDataFromSharedPreferences()
-        if (dataList != null && index != null) {
+        if (!dataList.isNullOrEmpty() && index != null) {
             Log.d("Call API", index.toString())
             dataList[index] = weatherCityData
             saveDataToSharedPreferences(dataList) // Lưu lại danh sách sau khi thay đổi
