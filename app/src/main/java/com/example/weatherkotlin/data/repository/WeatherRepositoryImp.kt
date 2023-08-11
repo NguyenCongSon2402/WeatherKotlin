@@ -23,7 +23,6 @@ class WeatherRepositoryImp : WeatherRepository {
             // Tạo một đối tượng API để gọi dự báo thời tiết
             val weatherAPI: WeatherApi = RetrofitHelper.getInstance().create(WeatherApi::class.java)
             Log.d("ERROR1", "getCurrentWeather")
-            // Gọi API để lấy thông tin thời tiết hiện tại
             val language = "vi"
             val details = true
             val response = weatherAPI.getCurrentWeathers(key, apiKey, language, details)
