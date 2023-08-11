@@ -16,9 +16,9 @@ import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 class WeatherRepositoryImp : WeatherRepository {
-    val apiKey = "TJqCay1uxCBOfk9aQ7DhtB372qnZLInP"
+    val apiKey = "3wS47y3dddAUoI9BXpjhezXFbVW8182f"
     override suspend fun getCurrentWeather(key: String?): Result<ArrayList<CurrentConditions>?> {
-        return withContext(Dispatchers.Main) {
+        return withContext(Dispatchers.IO) {
 
             // Tạo một đối tượng API để gọi dự báo thời tiết
             val weatherAPI: WeatherApi = RetrofitHelper.getInstance().create(WeatherApi::class.java)
@@ -40,7 +40,7 @@ class WeatherRepositoryImp : WeatherRepository {
     }
 
     override suspend fun getCityFromLocation(locationRequestBody: LocationRequestBody?): Result<CityResponse?> {
-        return withContext(Dispatchers.Main) {
+        return withContext(Dispatchers.IO) {
             Log.e("Location3", locationRequestBody.toString())
             // Tạo một đối tượng API để gọi dự báo thời tiết
             val weatherAPI: WeatherApi = RetrofitHelper.getInstance().create(WeatherApi::class.java)
@@ -66,7 +66,7 @@ class WeatherRepositoryImp : WeatherRepository {
     }
 
     override suspend fun getCity(qParam: String?): Result<List<CitySearch>?> {
-        return withContext(Dispatchers.Main) {
+        return withContext(Dispatchers.IO) {
             Log.e("Location3", qParam.toString())
             // Tạo một đối tượng API để gọi dự báo thời tiết
             val weatherAPI: WeatherApi = RetrofitHelper.getInstance().create(WeatherApi::class.java)
@@ -86,7 +86,7 @@ class WeatherRepositoryImp : WeatherRepository {
     }
 
     override suspend fun getHourlyForecast(key: String?): Result<List<HourlyForecasts>?> {
-        return withContext(Dispatchers.Main) {
+        return withContext(Dispatchers.IO) {
             // Tạo một đối tượng API để gọi dự báo thời tiết
             Log.d("ERROR2", "getHourlyForecast")
             val weatherAPI: WeatherApi =
@@ -108,7 +108,7 @@ class WeatherRepositoryImp : WeatherRepository {
     }
 
     override suspend fun getFiveDayForecast(key: String?): Result<FiveDayForecast?> {
-        return withContext(Dispatchers.Main) {
+        return withContext(Dispatchers.IO) {
             // Tạo một đối tượng API để gọi dự báo thời tiết
             Log.d("ERROR2", "getFiveDayForecast")
             val weatherAPI: WeatherApi =
