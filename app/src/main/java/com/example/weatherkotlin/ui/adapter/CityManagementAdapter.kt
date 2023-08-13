@@ -146,8 +146,8 @@ class CityManagementAdapter(
         try {
             if (!selectedItems.isNullOrEmpty()) {
                 //CitiesList.removeAt(position)
-                selectedItems.sortedDescending()
-                removeWeaherDataAtIndex(selectedItems)
+                //selectedItems.sortedDescending()
+                removeWeaherDataAtIndex(selectedItems.sortedDescending())
                 //removeCityDataAtIndex(position)
             }
             selectedItems.clear() // Xóa tất cả các phần tử đã chọn
@@ -183,6 +183,7 @@ class CityManagementAdapter(
             for (index in indices) {
                 if (index >= 0 && index < data.size && index < CitiesList.size) {
                     data.removeAt(index)
+                    Log.e("removeAt", index.toString())
                     CitiesList.removeAt(index)
                 }
             }

@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
         if (!dataList.isNullOrEmpty()) {
             Log.d("Hiển thị dữ liệu đã lưu", citiesList.toString())
-            Log.d("Hiển thị dữ liệu đã lưu", dataList!!.size.toString())
+            Log.d("Hiển thị dữ liệu đã lưu", dataList.toString())
             Toast.makeText(this, "Hiển thị dữ liệu đã lưu", Toast.LENGTH_LONG).show()
             // Hiển thị dữ liệu từ SharedPreferences lên UI
             showDataOnUI(dataList, citiesList)
@@ -161,11 +161,12 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     ): ArrayList<WeatherCityData>? {
         val dataList = readDataFromSharedPreferences()
         if (!dataList.isNullOrEmpty() && index != null) {
-            Log.d("Call API", index.toString())
+            Log.d("Call API", index.toString()+"---- đã thay")
             dataList[index] = weatherCityData
             saveDataToSharedPreferences(dataList) // Lưu lại danh sách sau khi thay đổi
             return dataList
         }
+        Log.d("Call API", index.toString()+"---- chưa  thay")
         return null
     }
 
@@ -239,9 +240,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                         .apply()
                 }
 
-
-// Chuyển danh sách thành chuỗi JSON sử dụng Gson
-
             }
         }
         weatherViewModel.currentWeatherLiveData.observe(this) {
@@ -272,7 +270,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                     }
                 }
             } else {
-                hourlyForecast = it
+                hourlyForecast= it
                 Log.e("Đã cập nhập xong2", it[0].Temperature?.Value.toString())
                 checkAndRenderData(currentWeather, hourlyForecast, fiveDayForecast)
             }
@@ -293,12 +291,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             }
 
         }
-//        weatherViewModel.error2.observeForever { errorValue ->
-//            if (errorValue != null) {
-//                Toast.makeText(this, errorValue, Toast.LENGTH_LONG)
-//                    .show()
-//            }
-//        }
 
 
     } catch (e: Exception) {
@@ -311,27 +303,31 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         fiveDayForecast: FiveDayForecast?
     ) {
         if (currentWeather != null && hourlyForecast != null && fiveDayForecast != null) {
-            Log.e("CheckNULLLLLL", currentPosition.toString())
-            if (currentPosition == null) {
+            Log.e("CheckcurrentPosition", currentPosition.toString())
+            if (dataList.isNullOrEmpty()) {
                 val weatherCityData =
                     WeatherCityData(currentWeather, hourlyForecast, fiveDayForecast)
                 dataList.add(weatherCityData)
                 Toast.makeText(this, "Cập", Toast.LENGTH_LONG).show()
                 dataList?.let { saveDataToSharedPreferences(it) }
                 dataList?.let { renderList(it, citiesList) }
-            } else {
+
+            } else if (!dataList.isNullOrEmpty() && currentPosition != null) {
                 val weatherCityData =
                     WeatherCityData(currentWeather, hourlyForecast, fiveDayForecast)
                 val data = replaceDataAtIndex(currentPosition!!, weatherCityData)
                 Toast.makeText(this, data?.size.toString(), Toast.LENGTH_LONG).show()
                 if (data.isNullOrEmpty()) {
-                    Toast.makeText(this, "Cập nhập thất bại", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Cập nhập thất bại1", Toast.LENGTH_LONG).show()
                 } else {
                     title_update.visibility = View.GONE
                     title_updateSucces.visibility = View.VISIBLE
                     swipeRefreshLayout.isRefreshing = false
-                    //Toast.makeText(this, "Cập nhập xong", Toast.LENGTH_LONG).show()
-                    data?.let { renderList(it, citiesList) }
+                    Toast.makeText(this, "Cập nhập xong", Toast.LENGTH_LONG).show()
+                    data?.let { adapter.updateDataList(it) }
+                    val currentPosition = viewPager2.currentItem
+                    viewPager2.adapter=adapter
+                    title_updateSucces.visibility = View.GONE
                 }
             }
         }
@@ -375,8 +371,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         adapter = ViewPagerAdapter(this, dataList)
         viewPager2.adapter = adapter
         circleIndicator3.setViewPager(viewPager2)
-
-        weatherViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
 
 //        val fragment = supportFragmentManager.findFragmentById(R.id.yourFragmentId) as f?
 //        val scrollView = fragment?.view?.findViewById<ScrollView>(R.id.scrollView)
@@ -469,7 +463,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     private fun setUpViewModel() {
         Log.d("LOIII", "KO CO DATA5")
         if (locationRequestBody != null) {
-
+            //weatherViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
             weatherViewModel.loadCurrentWeather(locationRequestBody)
             // Lắng nghe dữ liệu thời tiết trả về
             Log.d("ERROR1", "HAHAHAHAH")
@@ -485,6 +479,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             key = cityNameWithKey.substringAfter("-")
 
             if (!key.isNullOrEmpty()) {
+                weatherViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
                 weatherViewModel.loadWeather(key!!)
                 // Lắng nghe dữ liệu thời tiết trả về
                 Log.d("AAAAAAAAAAAAAAAAAAA", currentPosition.toString())
@@ -565,6 +560,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
         if (selectedPosition != null) {
             viewPager2.setCurrentItem(selectedPosition, false)
+            Log.e("onResume", selectedPosition.toString())
         }
         // Cài đặt callback cho ViewPager2 khi Fragment thay đổi
         viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
