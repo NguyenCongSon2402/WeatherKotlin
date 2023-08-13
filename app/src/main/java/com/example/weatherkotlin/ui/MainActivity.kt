@@ -40,6 +40,7 @@ import com.example.weatherkotlin.data.model1.WeatherCityData.WeatherCityData
 
 import com.example.weatherkotlin.ui.adapter.ViewPagerAdapter
 import com.example.weatherkotlin.ui.fragment.ConfirmDialog
+import com.example.weatherkotlin.ui.fragment.Fragment1
 import com.example.weatherkotlin.ui.viewmodel.MainActivityViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -81,11 +82,11 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        dataList = readDataFromSharedPreferences()
+        citiesList = getCitiesListFromSharedPreferences()
         initView()
         // Khởi tạo WeatherViewModel
         // Kiểm tra xem có dữ liệu trong SharedPreferences hay không
-        dataList = readDataFromSharedPreferences()
-        citiesList = getCitiesListFromSharedPreferences()
 
         if (!dataList.isNullOrEmpty()) {
             Log.d("Hiển thị dữ liệu đã lưu", citiesList.toString())
@@ -121,8 +122,8 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun showDataOnUI(data: ArrayList<WeatherCityData>?, dataCity: ArrayList<String>) {
         if (data != null) {
-            renderList(data, dataCity)
             setUpViewModel1()
+            renderList(data,dataCity)
         }
     }
 
@@ -161,12 +162,12 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     ): ArrayList<WeatherCityData>? {
         val dataList = readDataFromSharedPreferences()
         if (!dataList.isNullOrEmpty() && index != null) {
-            Log.d("Call API", index.toString()+"---- đã thay")
+            Log.d("Call API", index.toString() + "---- đã thay")
             dataList[index] = weatherCityData
             saveDataToSharedPreferences(dataList) // Lưu lại danh sách sau khi thay đổi
             return dataList
         }
-        Log.d("Call API", index.toString()+"---- chưa  thay")
+        Log.d("Call API", index.toString() + "---- chưa  thay")
         return null
     }
 
@@ -197,6 +198,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
         }
     }
+
 
     fun saveDataToSharedPreferences(weatherCityData: ArrayList<WeatherCityData>) {
         val gson = Gson()
@@ -270,8 +272,8 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                     }
                 }
             } else {
-                hourlyForecast= it
-                Log.e("Đã cập nhập xong2", it[0].Temperature?.Value.toString())
+                hourlyForecast = it
+                Log.e("Đã cập nhập xong2", it[0].DateTime.toString())
                 checkAndRenderData(currentWeather, hourlyForecast, fiveDayForecast)
             }
 
@@ -324,9 +326,13 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                     title_updateSucces.visibility = View.VISIBLE
                     swipeRefreshLayout.isRefreshing = false
                     Toast.makeText(this, "Cập nhập xong", Toast.LENGTH_LONG).show()
-                    data?.let { adapter.updateDataList(it) }
-                    val currentPosition = viewPager2.currentItem
-                    viewPager2.adapter=adapter
+                    data?.let {
+                        adapter.updateDataList(it)
+                        viewPager2.adapter = adapter
+// Khôi phục lại vị trí cũ
+                        viewPager2.currentItem = currentPosition as Int
+                        circleIndicator3.setViewPager(viewPager2)
+                    }
                     title_updateSucces.visibility = View.GONE
                 }
             }
@@ -340,7 +346,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     ) {
         Log.e("CheckNULLLLL", "kiểm tra")
         if (weatherCityData != null) {
-            adapter = ViewPagerAdapter(this, weatherCityData)
             viewPager2.adapter = adapter
             circleIndicator3.setViewPager(viewPager2)
             title_updateSucces.visibility = View.GONE
@@ -372,6 +377,11 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         viewPager2.adapter = adapter
         circleIndicator3.setViewPager(viewPager2)
 
+
+        weatherViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+
+        setupObserver()
+
 //        val fragment = supportFragmentManager.findFragmentById(R.id.yourFragmentId) as f?
 //        val scrollView = fragment?.view?.findViewById<ScrollView>(R.id.scrollView)
 
@@ -400,6 +410,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                 true
             } else if (itemId == R.id.item_setting) {
                 // Xử lý khi chọn Menu Item 2
+                startActivity(Intent(this, SettingsActivity::class.java))
                 true
             } else {
                 // Xử lý các mục menu khác nếu cần
@@ -467,7 +478,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             weatherViewModel.loadCurrentWeather(locationRequestBody)
             // Lắng nghe dữ liệu thời tiết trả về
             Log.d("ERROR1", "HAHAHAHAH")
-            setupObserver()
+            //setupObserver()
         }
     }
 
@@ -479,11 +490,9 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             key = cityNameWithKey.substringAfter("-")
 
             if (!key.isNullOrEmpty()) {
-                weatherViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
                 weatherViewModel.loadWeather(key!!)
                 // Lắng nghe dữ liệu thời tiết trả về
                 Log.d("AAAAAAAAAAAAAAAAAAA", currentPosition.toString())
-                setupObserver()
             }
         } else {
             checkLocationPermission()

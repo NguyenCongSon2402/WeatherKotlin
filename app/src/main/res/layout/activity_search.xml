@@ -15,23 +15,36 @@
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
-        android:layout_width="@dimen/_250sdp"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/_35sdp"
         android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_15sdp"
+        android:layout_toStartOf="@id/txtSearch"
         android:background="@drawable/transparent_background"
         android:hint="Nhập vị trí..."
-        android:imeOptions="actionSearch"
         android:inputType="text" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:visibility="gone" />
+
 
     <TextView
         android:id="@+id/txtSearch"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/_35sdp"
         android:layout_alignTop="@id/searchView"
+        android:layout_alignParentEnd="true"
         android:layout_marginStart="@dimen/_15sdp"
         android:layout_marginEnd="@dimen/_10sdp"
-        android:layout_toRightOf="@id/searchView"
+        android:foregroundGravity="center"
+        android:gravity="center"
         android:text="Tìm kiếm"
         android:textSize="@dimen/_15sdp" />
 

@@ -3,10 +3,9 @@ package com.example.weatherkotlin.ui.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-
+import androidx.viewpager2.widget.ViewPager2
 import com.example.weatherkotlin.data.model1.WeatherCityData.WeatherCityData
 import com.example.weatherkotlin.ui.fragment.Fragment1
-import java.util.ArrayList
 
 class ViewPagerAdapter(
     private val fragmentActivity: FragmentActivity,
@@ -32,4 +31,8 @@ class ViewPagerAdapter(
         dataList = newDataList
         notifyDataSetChanged()
     }
+
+
+
+
 }

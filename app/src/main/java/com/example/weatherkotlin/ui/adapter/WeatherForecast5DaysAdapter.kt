@@ -19,7 +19,7 @@ import java.util.Locale
 
 class WeatherForecast5DaysAdapter(
     private val data: FiveDayForecast,
-    private  val context: WeatherForecastActivity
+    private val context: WeatherForecastActivity
 ) :
     RecyclerView.Adapter<WeatherForecast5DaysAdapter.ViewHolder1>() {
     private var img_weather1 = arrayOf(
@@ -44,8 +44,8 @@ class WeatherForecast5DaysAdapter(
         val dateList: List<String>? = data.DailyForecasts?.mapNotNull { it.Date }
         val icList: List<String>? = data.DailyForecasts?.mapNotNull { it.Day?.Icon.toString() }
 
-        if (icList!=null){
-            iconList=icList.map { getIcon(it,context) }
+        if (icList != null) {
+            iconList = icList.map { getIcon(it, context) }
         }
         if (dateList != null) {
             dayOfWeekList = dateList.map { getDayOfWeekFromDateTime(it) }
@@ -55,8 +55,9 @@ class WeatherForecast5DaysAdapter(
 
     private fun getIcon(it: String, context: WeatherForecastActivity): Int {
         val iconName1 = "s_$it"
-        val resourceId1 = context.resources.getIdentifier(iconName1, "drawable",context.getPackageName() )
-        if (resourceId1!=0){
+        val resourceId1 =
+            context.resources.getIdentifier(iconName1, "drawable", context.getPackageName())
+        if (resourceId1 != 0) {
             return resourceId1
         }
         return R.drawable.s_1
@@ -98,6 +99,12 @@ class WeatherForecast5DaysAdapter(
 
     }
 
+    private fun getSetting(key: String): String {
+        val sharedPreferences =
+            context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        return sharedPreferences.getString(key, "") ?: ""
+    }
+
 
     fun getDayOfWeekFromDateTime(dateTimeString: String): String {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.getDefault())
@@ -125,14 +132,20 @@ class WeatherForecast5DaysAdapter(
     }
 
     fun getTemperatureInCelsius(position: Int): String {
+        val selectedTemp = getSetting("selectedTemp")
+        val selectedSpeed = getSetting("selectedSpeed")
+        if (selectedTemp.equals("°C")) {
+            val maxTempF = data.DailyForecasts[position]?.Temperature?.Maximum?.Value
+            val minTempF = data.DailyForecasts[position]?.Temperature?.Minimum?.Value
+            val maxTempC = fahrenheitToCelsius(maxTempF)
+            val minTempC = fahrenheitToCelsius(minTempF)
+            return "$minTempC°/$maxTempC°"
+        }
         val maxTempF = data.DailyForecasts[position]?.Temperature?.Maximum?.Value
         val minTempF = data.DailyForecasts[position]?.Temperature?.Minimum?.Value
-        val maxTempC = fahrenheitToCelsius(maxTempF)
-        val minTempC = fahrenheitToCelsius(minTempF)
-        return "$minTempC°/$maxTempC°"
+
+        return "$minTempF°/$maxTempF°"
     }
-
-
 
 
 }

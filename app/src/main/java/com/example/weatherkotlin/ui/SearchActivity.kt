@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
@@ -30,6 +31,7 @@ class SearchActivity : AppCompatActivity(){
     private lateinit var txtSearch: TextView
     private lateinit var result: TextView
     private lateinit var RVCity1: RecyclerView
+    private lateinit var progressBar:ProgressBar
 
     private lateinit var adapter: CityAdapter
     private var searchResults: List<CitySearch> = emptyList()
@@ -43,11 +45,12 @@ class SearchActivity : AppCompatActivity(){
         txtSearch = findViewById(R.id.txtSearch)
         result = findViewById(R.id.result)
         RVCity1 = findViewById(R.id.RVCity1)
+        progressBar  = findViewById(R.id.progressBar)
 
         RVCity1.layoutManager = LinearLayoutManager(this)
         // Khởi tạo adapter
-        adapter = CityAdapter(searchResults)
-        RVCity1.adapter = adapter
+        cityViewModel = ViewModelProvider(this).get(CityViewModel::class.java)
+        setupObserver()
         try {
             // Đăng ký sự kiện nhấn vào mục trong RecyclerView
             RVCity1.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
@@ -93,16 +96,22 @@ class SearchActivity : AppCompatActivity(){
 //        })
 // Gán OnClickListener cho TextView Tìm kiếm
         txtSearch.setOnClickListener {
+            searchResults= emptyList()
+            adapter = CityAdapter(searchResults)
+            RVCity1.adapter = adapter
             RVCity1.visibility = View.VISIBLE
+            progressBar.visibility = View.VISIBLE
             performSearch(searchView.query.toString())
         }
 
     }
 
     private fun performSearch(keyword: String) {
-        cityViewModel = ViewModelProvider(this).get(CityViewModel::class.java)
         cityViewModel.loadCityWeather(keyword)
-        setupObserver()
+    }
+
+    override fun onStart() {
+        super.onStart()
     }
 
 
@@ -118,10 +127,17 @@ class SearchActivity : AppCompatActivity(){
                         Toast.makeText(this, "loi $it", Toast.LENGTH_LONG).show()
                     }
                 }
+                searchView.isSubmitButtonEnabled = false
+                progressBar.visibility = View.GONE
+                RVCity1.visibility = View.GONE
             } else {
 
-                if (it.isEmpty())
+                if (it.isEmpty()) {
                     Toast.makeText(this, "Không tìm thấy thành phố", Toast.LENGTH_LONG).show()
+                    searchView.isSubmitButtonEnabled = true
+                    progressBar.visibility = View.GONE
+                    RVCity1.visibility = View.GONE
+                }
                 else
                 //updateCitiesList(it[0]?.LocalizedName.toString())
                     searchResults = it
@@ -135,6 +151,9 @@ class SearchActivity : AppCompatActivity(){
                         Toast.makeText(this, "loi $it", Toast.LENGTH_LONG).show()
                     }
                 }
+                searchView.isSubmitButtonEnabled = false
+                progressBar.visibility = View.GONE
+                RVCity1.visibility = View.GONE
 
             } else {
                 currentWeather = it
@@ -151,6 +170,9 @@ class SearchActivity : AppCompatActivity(){
                         Toast.makeText(this, "loi $it", Toast.LENGTH_LONG).show()
                     }
                 }
+                searchView.isSubmitButtonEnabled = false
+                progressBar.visibility = View.GONE
+                RVCity1.visibility = View.GONE
             } else {
                 hourlyForecast = it
                 Log.e("Đã cập nhập xong2", it[0].Temperature?.Value.toString())
@@ -165,6 +187,9 @@ class SearchActivity : AppCompatActivity(){
                         Toast.makeText(this, "loi $it", Toast.LENGTH_LONG).show()
                     }
                 }
+                searchView.isSubmitButtonEnabled = false
+                progressBar.visibility = View.GONE
+                RVCity1.visibility = View.GONE
             } else {
                 fiveDayForecast = it
                 Log.e("Đã cập nhập xong3", it.Headline?.Text.toString())
@@ -185,6 +210,8 @@ class SearchActivity : AppCompatActivity(){
         if (currentWeather != null && hourlyForecast != null && fiveDayForecast != null) {
             weatherCityData = WeatherCityData(currentWeather, hourlyForecast, fiveDayForecast)
             adapter.setData(searchResults)
+            progressBar.visibility = View.GONE
+            searchView.isSubmitButtonEnabled = true
         }
     }
 

@@ -46,10 +46,10 @@ class CityManagementAdapter(
             }
             itemView.setOnClickListener {
                 val selectedPosition = adapterPosition
-                Toast.makeText(context,selectedPosition.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, selectedPosition.toString(), Toast.LENGTH_SHORT).show()
                 val resultIntent = Intent()
                 resultIntent.putExtra("selected_position", selectedPosition)
-                Log.e("CheckSelected",resultIntent.data.toString())
+                Log.e("CheckSelected", resultIntent.data.toString())
                 (context as? CityManagementActivity)?.setResult(Activity.RESULT_OK, resultIntent)
                 // Kết thúc activity hiện tại
                 (context as? CityManagementActivity)?.finish()
@@ -101,6 +101,36 @@ class CityManagementAdapter(
             val cityName = cityNameWithKey.substringBefore("-")
             Log.e("Check", cityName)
             holder.txt_location.text = cityName
+            val selectedTemp = getSetting("selectedTemp")
+            if (selectedTemp.equals("°C")) {
+                holder.txt_temperature1.setText(
+                    fahrenheitToCelsius((data?.get(position)?.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Minimum?.Value)).toString() + "°/"
+                            + fahrenheitToCelsius(
+                        (data?.get(position)?.fiveDayForecast?.DailyForecasts?.get(
+                            0
+                        )?.Temperature?.Maximum?.Value)
+                    ).toString() + "°"
+                )
+                holder.txt_temperature.setText(
+                    data?.get(position)?.currentWeather?.get(0)?.Temperature?.Metric?.Value.toString() + "°" + data?.get(
+                        position
+                    )?.currentWeather?.get(
+                        0
+                    )?.Temperature?.Metric?.Unit.toString()
+                )
+            } else {
+                holder.txt_temperature1.setText(
+                    (data?.get(position)?.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Minimum?.Value).toString() + "°/"
+                            + (data?.get(position)?.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Maximum?.Value).toString() + "°"
+                )
+                holder.txt_temperature.setText(
+                    data?.get(position)?.currentWeather?.get(0)?.Temperature?.Imperial?.Value.toString() + "°" + data?.get(
+                        position
+                    )?.currentWeather?.get(
+                        0
+                    )?.Temperature?.Imperial?.Unit.toString()
+                )
+            }
         } else {
             // Nếu không tồn tại phần tử tại vị trí position, đặt thành chuỗi rỗng hoặc một giá trị mặc định khác
             holder.txt_location.text = ""
@@ -200,14 +230,10 @@ class CityManagementAdapter(
         sharedPreferences.edit().putString("DataListJson", dataListJson).apply()
     }
 
-    // Hàm xoá thành phố trong danh sách và cập nhật vào SharedPreferences
-    private fun removeCityDataAtIndex(position: Int) {
-        if (CitiesList != null && position >= 0 && position < CitiesList.size) {
-            CitiesList.removeAt(position)
-            //Log.e("XOA Weather", CitiesList.removeAt(position))
-            Log.e("Weather", CitiesList.size.toString())
-            //saveCitiesListToSharedPreferences()
-        }
+    private fun getSetting(key: String): String {
+        val sharedPreferences =
+            context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        return sharedPreferences.getString(key, "") ?: ""
     }
 
     // Hàm lưu danh sách thành phố vào SharedPreferences
@@ -219,6 +245,13 @@ class CityManagementAdapter(
             .edit()
             .putString("citiesList", citiesListJson)
             .apply() // Lưu lại danh sách sau khi xoá phần tử
+    }
+
+    fun fahrenheitToCelsius(fahrenheit: Int?): Int? {
+        if (fahrenheit != null) {
+            return (fahrenheit - 32) * 5 / 9
+        }
+        return null
     }
 
 

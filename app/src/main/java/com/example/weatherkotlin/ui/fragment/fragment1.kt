@@ -1,5 +1,6 @@
 package com.example.weatherkotlin.ui.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -53,6 +54,8 @@ class Fragment1 : Fragment() {
     private lateinit var scrollView: NestedScrollView
     private lateinit var data: WeatherCityData
     private lateinit var view_paper2: ViewPager2
+    private var selectedTemp: String? = null
+    private var selectedSpeed: String? = null
 
 
     override fun onCreateView(
@@ -87,8 +90,189 @@ class Fragment1 : Fragment() {
         icon3 = rootView.findViewById(R.id.icon3)
 
 
-        //swipeRefreshLayout = requireActivity().findViewById(R.id.swipeRefreshLayout)
+        return rootView
+    }
 
+    private fun getSetting(key: String): String {
+        val sharedPreferences =
+            requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE)
+        return sharedPreferences.getString(key, "") ?: ""
+    }
+
+    override fun onStart() {
+        super.onStart()
+        selectedTemp = getSetting("selectedTemp")
+        selectedSpeed = getSetting("selectedSpeed")
+        populateWeatherData()
+
+        btn_next.setOnClickListener {
+            navigateToNewActivity(data.fiveDayForecast)
+        }
+        val context = requireContext() // hoặc val context = context
+
+        val weatherRVAdapter = WeatherRVAdapter(data.hourlyForecast, context)
+        recyclerView.adapter = weatherRVAdapter
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
+    }
+
+    private fun populateWeatherData() {
+        val bundle = arguments
+        if (bundle != null) {
+            val jsonData = bundle.getString("data")
+            if (jsonData != null) {
+                data = Gson().fromJson(jsonData, WeatherCityData::class.java)
+                populateTextViews()
+            }
+        }
+    }
+
+
+    private fun populateTextViews() {
+        val dateList: List<String> =
+            data.fiveDayForecast?.DailyForecasts?.mapNotNull { it?.Date } ?: emptyList()
+
+        val dayOfWeekList: List<String> = dateList.map { getDayOfWeekFromDateTime(it) }
+        if (selectedTemp.equals("°C")) {
+
+            textViewData.setText(
+                data.currentWeather?.get(0)?.WeatherText.toString() + " " + fahrenheitToCelsius(
+                    (data.fiveDayForecast?.DailyForecasts?.get(
+                        0
+                    )?.Temperature?.Minimum?.Value)
+                ).toString() + "°/"
+                        + fahrenheitToCelsius((data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Maximum?.Value)).toString() + "°"
+            )
+            txt_temperature.setText(
+                data.currentWeather?.get(0)?.Temperature?.Metric?.Value.toString() + "°" + data.currentWeather?.get(
+                    0
+                )?.Temperature?.Metric?.Unit.toString()
+            )
+
+            txt_temperature_today.setText(
+                fahrenheitToCelsius((data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Minimum?.Value)).toString() + "°/"
+                        + fahrenheitToCelsius((data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Maximum?.Value)).toString() + "°"
+            )
+            txt_temperatureTomorrow.setText(
+                fahrenheitToCelsius((data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Minimum?.Value)).toString() + "°/"
+                        + fahrenheitToCelsius((data.fiveDayForecast?.DailyForecasts?.get(1)?.Temperature?.Maximum?.Value)).toString() + "°"
+            )
+            txt_temperatureAfterTomorrow.setText(
+                fahrenheitToCelsius((data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Minimum?.Value)).toString() + "°/" + fahrenheitToCelsius(
+                    (data.fiveDayForecast?.DailyForecasts?.get(2)?.Temperature?.Maximum?.Value)
+                ).toString() + "°"
+            )
+            RealFeelTemperature.setText(data.currentWeather?.get(0)?.RealFeelTemperature?.Metric?.Value.toString() + "°")
+        } else {
+            textViewData.setText(
+                data.currentWeather?.get(0)?.WeatherText.toString() + " " +
+                        (data.fiveDayForecast?.DailyForecasts?.get(
+                            0
+                        )?.Temperature?.Minimum?.Value
+                                ).toString() + "°/"
+                        + (data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Maximum?.Value).toString() + "°"
+            )
+            txt_temperature.setText(
+                data.currentWeather?.get(0)?.Temperature?.Imperial?.Value.toString() + "°" + data.currentWeather?.get(
+                    0
+                )?.Temperature?.Imperial?.Unit.toString()
+            )
+
+            txt_temperature_today.setText(
+                (data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Minimum?.Value).toString() + "°/"
+                        + (data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Maximum?.Value).toString() + "°"
+            )
+            txt_temperatureTomorrow.setText(
+                (data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Minimum?.Value).toString() + "°/"
+                        + (data.fiveDayForecast?.DailyForecasts?.get(1)?.Temperature?.Maximum?.Value).toString() + "°"
+            )
+            txt_temperatureAfterTomorrow.setText(
+                ((data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Minimum?.Value).toString() + "°/" +
+                        (data.fiveDayForecast?.DailyForecasts?.get(2)?.Temperature?.Maximum?.Value).toString()) + "°"
+            )
+            RealFeelTemperature.setText(data.currentWeather?.get(0)?.RealFeelTemperature?.Imperial?.Value.toString() + "°")
+
+        }
+        txt_today.setText(
+            "Hôm nay" + " " + data.fiveDayForecast?.DailyForecasts?.get(
+                0
+            )?.Day?.IconPhrase.toString()
+        )
+
+
+        txt_Tomorrow.setText("Ngày mai" + " " + data.fiveDayForecast?.DailyForecasts?.get(1)?.Day?.IconPhrase.toString())
+
+
+        txt_afterTomorrow.setText(
+            dayOfWeekList[2] + " " + data.fiveDayForecast?.DailyForecasts?.get(2)?.Day?.IconPhrase.toString()
+        )
+
+        Humidity.setText(data.currentWeather?.get(0)?.RelativeHumidity.toString() + "%")
+        UVIndex.setText(data.currentWeather?.get(0)?.UVIndex.toString())
+        ATM.setText(
+            data.currentWeather?.get(0)?.Pressure?.Metric?.Value.toString() + data.currentWeather?.get(
+                0
+            )?.Pressure?.Metric?.Unit.toString()
+        )
+        txt_direction.setText(data.currentWeather?.get(0)?.Wind?.Direction?.Localized)
+        if (selectedSpeed.equals("Km/h")) {
+            speeds.setText(
+                data.currentWeather?.get(0)?.Wind?.Speed?.Metric?.Value.toString() + data.currentWeather?.get(
+                    0
+                )?.Wind?.Speed?.Metric?.Unit.toString()
+            )
+        } else {
+            speeds.setText(
+                data.currentWeather?.get(0)?.Wind?.Speed?.Imperial?.Value.toString() + data.currentWeather?.get(
+                    0
+                )?.Wind?.Speed?.Imperial?.Unit.toString()
+            )
+        }
+
+        rain.setText(data.hourlyForecast?.get(0)?.RainProbability.toString() + "%")
+
+
+        val ic1 = data.fiveDayForecast?.DailyForecasts?.get(0)?.Day?.Icon
+        val ic2 = data.fiveDayForecast?.DailyForecasts?.get(1)?.Day?.Icon
+        val ic3 = data.fiveDayForecast?.DailyForecasts?.get(2)?.Day?.Icon
+
+        val iconName1 = "s_$ic1" // iconName sẽ là "s_2"
+        val iconName2 = "s_$ic2" // iconName sẽ là "s_2"
+        val iconName3 = "s_$ic3" // iconName sẽ là "s_2"
+
+
+        val resourceId1 =
+            resources.getIdentifier(iconName1, "drawable", requireContext().getPackageName())
+        val resourceId2 =
+            resources.getIdentifier(iconName2, "drawable", requireContext().getPackageName())
+        val resourceId3 =
+            resources.getIdentifier(iconName3, "drawable", requireContext().getPackageName())
+
+        if (resourceId1 != 0) {
+            icon1.setImageResource(resourceId1)
+
+        } else {
+            icon1.setImageResource(R.drawable.s_1)
+        }
+        if (resourceId2 != 0) {
+            icon2.setImageResource(resourceId2)
+
+        } else {
+            icon2.setImageResource(R.drawable.s_1)
+        }
+        if (resourceId3 != 0) {
+            icon3.setImageResource(resourceId3)
+
+        } else {
+            icon3.setImageResource(R.drawable.s_1)
+        }
+    }
+
+    private fun setupRecyclerView() {
         val layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recyclerView.layoutManager = layoutManager
@@ -139,120 +323,6 @@ class Fragment1 : Fragment() {
 
         })
 
-
-        // Lấy dữ liệu từ Bundle và hiển thị lên TextView
-        val bundle = arguments
-        if (bundle != null) {
-            val jsonData = bundle.getString("data")
-            if (jsonData != null) {
-                val gson = Gson()
-                data = gson.fromJson(jsonData, WeatherCityData::class.java)
-
-
-                val dateList: List<String> =
-                    data.fiveDayForecast?.DailyForecasts?.mapNotNull { it?.Date } ?: emptyList()
-
-                val dayOfWeekList: List<String> = dateList.map { getDayOfWeekFromDateTime(it) }
-
-
-
-
-                textViewData.setText(data.currentWeather?.get(0)?.WeatherText.toString() +" "+fahrenheitToCelsius((data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Minimum?.Value)).toString() + "°/"
-                        + fahrenheitToCelsius((data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Maximum?.Value)).toString() + "°")
-                txt_temperature.setText(
-                    data.currentWeather?.get(0)?.Temperature?.Metric?.Value.toString() + "°" + data.currentWeather?.get(
-                        0
-                    )?.Temperature?.Metric?.Unit.toString()
-                )
-                txt_today.setText(
-                    "Hôm nay" + " " + data.fiveDayForecast?.DailyForecasts?.get(
-                        0
-                    )?.Day?.IconPhrase.toString()
-                )
-                txt_temperature_today.setText(
-                    fahrenheitToCelsius((data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Minimum?.Value)).toString() + "°/"
-                            + fahrenheitToCelsius((data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Maximum?.Value)).toString() + "°"
-                )
-
-                txt_Tomorrow.setText("Ngày mai" + " " + data.fiveDayForecast?.DailyForecasts?.get(1)?.Day?.IconPhrase.toString())
-                txt_temperatureTomorrow.setText(
-                    fahrenheitToCelsius((data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Minimum?.Value)).toString() + "°/"
-                            + fahrenheitToCelsius((data.fiveDayForecast?.DailyForecasts?.get(1)?.Temperature?.Maximum?.Value)).toString() + "°"
-                )
-
-                txt_afterTomorrow.setText(
-                    dayOfWeekList[2] + " " + data.fiveDayForecast?.DailyForecasts?.get(2)?.Day?.IconPhrase.toString()
-                )
-                txt_temperatureAfterTomorrow.setText(
-                    fahrenheitToCelsius((data.fiveDayForecast?.DailyForecasts?.get(0)?.Temperature?.Minimum?.Value)).toString() + "°/" + fahrenheitToCelsius(
-                        (data.fiveDayForecast?.DailyForecasts?.get(2)?.Temperature?.Maximum?.Value)
-                    ).toString() + "°"
-                )
-
-                Humidity.setText(data.currentWeather?.get(0)?.RelativeHumidity.toString() + "%")
-                RealFeelTemperature.setText(data.currentWeather?.get(0)?.RealFeelTemperature?.Metric?.Value.toString() + "°")
-                UVIndex.setText(data.currentWeather?.get(0)?.UVIndex.toString())
-                ATM.setText(
-                    data.currentWeather?.get(0)?.Pressure?.Metric?.Value.toString() + data.currentWeather?.get(
-                        0
-                    )?.Pressure?.Metric?.Unit.toString()
-                )
-                txt_direction.setText(data.currentWeather?.get(0)?.Wind?.Direction?.Localized)
-                speeds.setText(
-                    data.currentWeather?.get(0)?.Wind?.Speed?.Metric?.Value.toString() + data.currentWeather?.get(
-                        0
-                    )?.Wind?.Speed?.Metric?.Unit.toString()
-                )
-
-                rain.setText(data.hourlyForecast?.get(0)?.RainProbability.toString()+"%")
-
-
-
-                val ic1=data.fiveDayForecast?.DailyForecasts?.get(0)?.Day?.Icon
-                val ic2=data.fiveDayForecast?.DailyForecasts?.get(1)?.Day?.Icon
-                val ic3=data.fiveDayForecast?.DailyForecasts?.get(2)?.Day?.Icon
-
-                val iconName1 = "s_$ic1" // iconName sẽ là "s_2"
-                val iconName2 = "s_$ic2" // iconName sẽ là "s_2"
-                val iconName3 = "s_$ic3" // iconName sẽ là "s_2"
-
-
-                val resourceId1 = resources.getIdentifier(iconName1, "drawable",requireContext().getPackageName() )
-                val resourceId2 = resources.getIdentifier(iconName2, "drawable",requireContext().getPackageName() )
-                val resourceId3 = resources.getIdentifier(iconName3, "drawable",requireContext().getPackageName() )
-
-                if (resourceId1 != 0) {
-                    icon1.setImageResource(resourceId1)
-
-                } else {
-                    icon1.setImageResource(R.drawable.s_1)
-                }
-                if (resourceId2 != 0) {
-                    icon2.setImageResource(resourceId2)
-
-                } else {
-                    icon2.setImageResource(R.drawable.s_1)
-                }
-                if (resourceId3 != 0) {
-                    icon3.setImageResource(resourceId3)
-
-                } else {
-                    icon3.setImageResource(R.drawable.s_1)
-                }
-
-
-            }
-
-        }
-        btn_next.setOnClickListener {
-            navigateToNewActivity(data.fiveDayForecast)
-        }
-        val context = requireContext() // hoặc val context = context
-
-        val weatherRVAdapter = WeatherRVAdapter(data.hourlyForecast,context)
-        recyclerView.adapter = weatherRVAdapter
-
-        return rootView
     }
 
     private val RecyclerView.canScrollRight: Boolean
@@ -321,21 +391,6 @@ class Fragment1 : Fragment() {
         }
         return null
     }
-
-//    override fun onResume() {
-//        super.onResume()
-//        if (isAdded) {
-//            scrollView.viewTreeObserver.addOnScrollChangedListener {
-//                val isAtTop = scrollView.scrollY == 0
-//                val parentActivity = activity as? MainActivity
-//                Toast.makeText(requireContext(), isAtTop.toString(), Toast.LENGTH_SHORT).show()
-//
-//                if (parentActivity != null) {
-//                    parentActivity.setSwipeRefreshLayoutEnabled(isAtTop)
-//                }
-//            }
-//        }
-//    }
 
 
 }

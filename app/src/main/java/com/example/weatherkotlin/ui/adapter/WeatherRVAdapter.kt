@@ -26,6 +26,8 @@ class WeatherRVAdapter(
     private var timeList: List<String> = emptyList()
     private var tempCList: List<Int> = emptyList()
     private var iconList: List<Int> = emptyList()
+    val selectedTemp = getSetting("selectedTemp")
+    val selectedSpeed = getSetting("selectedSpeed")
 
     init {
         updateDataLists()
@@ -38,6 +40,7 @@ class WeatherRVAdapter(
         if (dateList != null && tempList != null) {
             timeList = dateList.map { getTimeFromDateTime(it) }
             tempCList = tempList.map { fahrenheitToCelsius(it) }
+
         }
         if (icList != null) {
             iconList = icList.map { getIcon(it, context) }
@@ -63,10 +66,19 @@ class WeatherRVAdapter(
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
         holder.tv_time.text = timeList[position]
-        holder.tv_temperature.text = tempCList[position].toString() + "°C"
-        val milesPerHour = hourlyForecast?.get(position)?.Wind?.Speed?.Value ?: 0.0
-        val kilometersPerHour = String.format("%.1f", milesPerHour * 1.609344)
-        holder.tv_WindSpeed.text = kilometersPerHour.toString() + "Km/h"
+        if (selectedTemp.equals("°C")) {
+            holder.tv_temperature.text = tempCList[position].toString() + "°C"
+        } else {
+            holder.tv_temperature.text =
+                hourlyForecast?.get(position)?.Temperature?.Value.toString() + "°F"
+        }
+        if (selectedSpeed.equals("Km/h")) {
+            val milesPerHour = hourlyForecast?.get(position)?.Wind?.Speed?.Value ?: 0.0
+            val kilometersPerHour = String.format("%.1f", milesPerHour * 1.609344)
+            holder.tv_WindSpeed.text = kilometersPerHour.toString() + "Km/h"
+        }else{
+            holder.tv_WindSpeed.text=hourlyForecast?.get(position)?.Wind?.Speed?.Value.toString()+hourlyForecast?.get(position)?.Wind?.Speed?.Unit
+        }
         holder.Img_Condition.setImageResource(iconList[position])
 
     }
@@ -100,6 +112,12 @@ class WeatherRVAdapter(
             val celsius = (it - 32) * 5 / 9
             celsius
         } ?: 0
+    }
+
+    private fun getSetting(key: String): String {
+        val sharedPreferences =
+            context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        return sharedPreferences.getString(key, "") ?: ""
     }
 
 
