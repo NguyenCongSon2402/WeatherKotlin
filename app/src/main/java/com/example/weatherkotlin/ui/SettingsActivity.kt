@@ -54,10 +54,10 @@ class SettingsActivity : AppCompatActivity() {
         var selectedTemp = getSetting("selectedTemp")
         var selectedSpeed = getSetting("selectedSpeed")
         if (selectedTemp.equals("")){
-            selectedTemp="°C"
+            selectedTemp="°F"
         }
         if (selectedSpeed.equals(""))
-            selectedSpeed="Km/h"
+            selectedSpeed="mi/h"
         spinner_tempC.selectedIndex = spinner_tempC.getItems<String>().indexOf(selectedTemp)
 
         spinner_Speed.selectedIndex = spinner_Speed.getItems<String>().indexOf(selectedSpeed)
