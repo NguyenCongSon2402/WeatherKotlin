@@ -25,22 +25,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import androidx.viewpager2.widget.ViewPager2
-
 import com.example.weatherkotlin.R
 import com.example.weatherkotlin.data.model1.CurrentConditions.CurrentConditions
 import com.example.weatherkotlin.data.model1.FiveDayForecast.FiveDayForecast
 import com.example.weatherkotlin.data.model1.GeopositionSearch.LocationRequestBody
 import com.example.weatherkotlin.data.model1.HourlyForecasts.HourlyForecasts
 import com.example.weatherkotlin.data.model1.WeatherCityData.WeatherCityData
-
 import com.example.weatherkotlin.ui.adapter.ViewPagerAdapter
 import com.example.weatherkotlin.ui.fragment.ConfirmDialog
-import com.example.weatherkotlin.ui.fragment.Fragment1
 import com.example.weatherkotlin.ui.viewmodel.MainActivityViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -49,8 +47,7 @@ import com.google.gson.reflect.TypeToken
 import me.relex.circleindicator.CircleIndicator3
 import java.io.File
 import java.io.FileOutputStream
-import java.lang.Exception
-import kotlin.collections.ArrayList
+
 
 class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var scrollView: ScrollView
@@ -375,15 +372,15 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         swipeRefreshLayout.setOnRefreshListener(this)
         adapter = ViewPagerAdapter(this, dataList)
         viewPager2.adapter = adapter
+        viewPager2.setPageTransformer(Horizontal3DPageTransformer())
         circleIndicator3.setViewPager(viewPager2)
+
 
 
         weatherViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
 
         setupObserver()
 
-//        val fragment = supportFragmentManager.findFragmentById(R.id.yourFragmentId) as f?
-//        val scrollView = fragment?.view?.findViewById<ScrollView>(R.id.scrollView)
 
     }
 
@@ -670,5 +667,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                 .apply()
         }
     }
+
+
 
 }

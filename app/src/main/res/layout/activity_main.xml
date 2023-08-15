@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.weatherkotlin.ui.CustomSwipeToRefresh xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -62,7 +63,9 @@
 
         <me.relex.circleindicator.CircleIndicator3
             android:id="@+id/indicator"
+            app:ci_animator="@animator/scale_with_alpha"
             android:layout_width="match_parent"
+            app:ci_animator_reverse="@animator/scale_with_alpha_inverse"
             android:layout_height="@dimen/_15sdp"
             android:layout_below="@+id/title_fragment" />
 
@@ -73,6 +76,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/title_fragment"
             android:layout_centerInParent="true" />
+
         <TextView
             android:id="@+id/title_update"
             android:layout_width="wrap_content"
@@ -96,4 +100,4 @@
             android:visibility="gone" />
 
     </RelativeLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</com.example.weatherkotlin.ui.CustomSwipeToRefresh>

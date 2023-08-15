@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 class WeatherRepositoryImp : WeatherRepository {
-    val apiKey = "hKDoJ1OUVdXhitZqzxVHTWyxOMamgWuv"
+    val apiKey = "oZ3DxVncPAVNYQmF96AqiIb1MIgvOVjS"
     override suspend fun getCurrentWeather(key: String?): Result<ArrayList<CurrentConditions>?> {
         return withContext(Dispatchers.IO) {
 
